@@ -12,7 +12,7 @@ const initialNodes = [
     position: { x: 50, y: 100 },
     style: {
       borderRadius: "50%",
-      background: "#edc915",
+      background: "rgb(179, 170, 148)",
       border: "3px solid black",
       width: "65px",
       height: "65px",
@@ -30,7 +30,7 @@ const initialNodes = [
     position: { x: 200, y: 50 },
     style: {
       borderRadius: "50%",
-      background: "#edc915",
+      background: "rgb(179, 170, 148)",
       border: "3px solid black",
       width: "65px",
       height: "65px",
@@ -47,7 +47,7 @@ const initialNodes = [
     position: { x: 350, y: 100 },
     style: {
       borderRadius: "50%",
-      background: "#edc915",
+      background: "rgb(179, 170, 148)",
       border: "3px solid black",
       width: "65px",
       height: "65px",
@@ -64,7 +64,7 @@ const initialNodes = [
     position: { x: 500, y: 200 },
     style: {
       borderRadius: "50%",
-      background: "#edc915",
+      background: "rgb(179, 170, 148)",
       border: "3px solid black",
       width: "65px",
       height: "65px",
@@ -81,7 +81,7 @@ const initialNodes = [
     position: { x: 650, y: 150 },
     style: {
       borderRadius: "50%",
-      background: "#edc915",
+      background: "rgb(179, 170, 148)",
       border: "3px solid black",
       width: "65px",
       height: "65px",
@@ -98,7 +98,7 @@ const initialNodes = [
     position: { x: 100, y: 300 },
     style: {
       borderRadius: "50%",
-      background: "#edc915",
+      background: "rgb(179, 170, 148)",
       border: "3px solid black",
       width: "65px",
       height: "65px",
@@ -115,7 +115,7 @@ const initialNodes = [
     position: { x: 250, y: 250 },
     style: {
       borderRadius: "50%",
-      background: "#edc915",
+      background: "rgb(179, 170, 148)",
       border: "3px solid black",
       width: "65px",
       height: "65px",
@@ -132,7 +132,7 @@ const initialNodes = [
     position: { x: 400, y: 300 },
     style: {
       borderRadius: "50%",
-      background: "#edc915",
+      background: "rgb(179, 170, 148)",
       border: "3px solid black",
       width: "65px",
       height: "65px",
@@ -149,7 +149,7 @@ const initialNodes = [
     position: { x: 550, y: 400 },
     style: {
       borderRadius: "50%",
-      background: "#edc915",
+      background: "rgb(179, 170, 148)",
       border: "3px solid black",
       width: "65px",
       height: "65px",
@@ -166,7 +166,7 @@ const initialNodes = [
     position: { x: 700, y: 350 },
     style: {
       borderRadius: "50%",
-      background: "#edc915",
+      background: "rgb(179, 170, 148)",
       border: "3px solid black",
       width: "65px",
       height: "65px",
@@ -183,7 +183,7 @@ const initialNodes = [
     position: { x: 850, y: 450 },
     style: {
       borderRadius: "50%",
-      background: "#edc915",
+      background: "rgb(179, 170, 148)",
       border: "3px solid black",
       width: "65px",
       height: "65px",

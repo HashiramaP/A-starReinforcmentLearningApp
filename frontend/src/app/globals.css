@@ -43,3 +43,27 @@ body {
   font-style: normal;
   font-display: swap; /* Ensures better loading behavior */
 }
+
+/* styles.css */
+.rock-button {
+  background-color: rgb(179, 170, 148); /* Earthy beige tone */
+  border: 3px solid rgb(45, 45, 45); /* Darker edge for rock effect */
+  border-radius: 25px 35px 20px 30px; /* Irregular shape */
+  padding: 10px 20px;
+  font-family: Halo Dek, Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  color: black; /* Dark brown text */
+  box-shadow: -5px 5px 8px rgba(0, 0, 0, 0.3); /* Rock-like shadow */
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.rock-button:hover {
+  transform: scale(1.05);
+  box-shadow: -3px 3px 5px rgba(0, 0, 0, 0.6);
+}
+
+.rock-button:active {
+  transform: scale(0.95);
+  box-shadow: -2px 2px 3px rgba(0, 0, 0, 0.8);
+}
