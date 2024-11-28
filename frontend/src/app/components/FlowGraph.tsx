@@ -19,9 +19,11 @@ const initialNodes = [
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
+      fontSize: "18px", // Make the font size larger
+      fontFamily: "Halo Dek, Arial, Helvetica, sans-serif", // Use your custom font
     },
-    connectable: false, // Hide connectable points
   },
+
   {
     id: "B",
     data: { label: "B" },
@@ -35,8 +37,9 @@ const initialNodes = [
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
+      fontSize: "18px", // Make the font size larger
+      fontFamily: "Halo Dek, Arial, Helvetica, sans-serif", // Use your custom font
     },
-    connectable: false, // Hide connectable points
   },
   {
     id: "C",
@@ -51,8 +54,9 @@ const initialNodes = [
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
+      fontSize: "18px", // Make the font size larger
+      fontFamily: "Halo Dek, Arial, Helvetica, sans-serif", // Use your custom font
     },
-    connectable: false, // Hide connectable points
   },
   {
     id: "D",
@@ -67,8 +71,9 @@ const initialNodes = [
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
+      fontSize: "18px", // Make the font size larger
+      fontFamily: "Halo Dek, Arial, Helvetica, sans-serif", // Use your custom font
     },
-    connectable: false, // Hide connectable points
   },
   {
     id: "E",
@@ -83,8 +88,9 @@ const initialNodes = [
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
+      fontSize: "18px", // Make the font size larger
+      fontFamily: "Halo Dek, Arial, Helvetica, sans-serif", // Use your custom font
     },
-    connectable: false, // Hide connectable points
   },
   {
     id: "F",
@@ -99,8 +105,9 @@ const initialNodes = [
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
+      fontSize: "18px", // Make the font size larger
+      fontFamily: "Halo Dek, Arial, Helvetica, sans-serif", // Use your custom font
     },
-    connectable: false, // Hide connectable points
   },
   {
     id: "G",
@@ -115,8 +122,9 @@ const initialNodes = [
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
+      fontSize: "18px", // Make the font size larger
+      fontFamily: "Halo Dek, Arial, Helvetica, sans-serif", // Use your custom font
     },
-    connectable: false, // Hide connectable points
   },
   {
     id: "H",
@@ -131,8 +139,9 @@ const initialNodes = [
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
+      fontSize: "18px", // Make the font size larger
+      fontFamily: "Halo Dek, Arial, Helvetica, sans-serif", // Use your custom font
     },
-    connectable: false, // Hide connectable points
   },
   {
     id: "I",
@@ -147,8 +156,9 @@ const initialNodes = [
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
+      fontSize: "18px", // Make the font size larger
+      fontFamily: "Halo Dek, Arial, Helvetica, sans-serif", // Use your custom font
     },
-    connectable: false, // Hide connectable points
   },
   {
     id: "J",
@@ -163,8 +173,9 @@ const initialNodes = [
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
+      fontSize: "18px", // Make the font size larger
+      fontFamily: "Halo Dek, Arial, Helvetica, sans-serif", // Use your custom font
     },
-    connectable: false, // Hide connectable points
   },
   {
     id: "K",
@@ -179,8 +190,9 @@ const initialNodes = [
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
+      fontSize: "18px", // Make the font size larger
+      fontFamily: "Halo Dek, Arial, Helvetica, sans-serif", // Use your custom font
     },
-    connectable: false, // Hide connectable points
   },
 ];
 
@@ -248,13 +260,23 @@ const initialEdges = [
   },
 ];
 
+const proOptions = { hideAttribution: true };
+
 const FlowGraph = () => {
   const [nodes] = useState(initialNodes);
   const [edges] = useState(initialEdges);
 
   return (
     <div style={{ height: "600px", width: "100%" }}>
-      <ReactFlow nodes={nodes} edges={edges} />
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        proOptions={proOptions}
+        panOnDrag={false} // Disable panning
+        zoomOnScroll={false} // Disable zooming with scroll
+        zoomOnPinch={false} // Disable pinch zoom
+        defaultViewport={{ x: 380, y: 0, zoom: 1 }} // Set default offset and zoom
+      />
     </div>
   );
 };
