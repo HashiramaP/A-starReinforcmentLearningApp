@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
+  --background: #edc915;
   --foreground: #171717;
 }
 
@@ -18,4 +18,24 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Arc text for curved text effect */
+.arc-text {
+  display: inline-block;
+  background-clip: text;
+  color: transparent;
+  white-space: nowrap;
+  position: relative;
+  font-size: 3rem;
+  line-height: 1.2;
+  text-align: center;
+}
+
+@font-face {
+  font-family: "Halo Dek";
+  src: url("/fonts/HaloDek.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap; /* Ensures better loading behavior */
 }

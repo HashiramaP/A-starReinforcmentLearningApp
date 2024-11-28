@@ -8,6 +8,9 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        halo: ["Halo Dek", "Arial", "Helvetica", "sans-serif"], // Adding your custom font here
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
