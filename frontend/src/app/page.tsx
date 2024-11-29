@@ -7,9 +7,8 @@ export default function Home() {
       <HomepageHeader />
       <FlowGraph />
       <div className="flex space-x-6">
-        <button className="rock-button">Train</button>
-        <button className="rock-button">Test</button>
-        <button className="rock-button">Next Graph</button>
+        <button className="rock-button">Generate a Graph</button>
+        <button className="rock-button">Train my Model</button>
       </div>
     </div>
   );

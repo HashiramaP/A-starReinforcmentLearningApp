@@ -19,7 +19,7 @@ export default function HomepageHeader() {
             textAnchor="middle" // Centers the text
             startOffset="50%" // Adjusts the starting position
           >
-            A* Reinforcement Learning
+            A* GNN Reinforcement Learning
           </textPath>
         </text>
       </svg>
