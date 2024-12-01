@@ -1,35 +1,43 @@
 "use client";
 
 import React from "react";
+import { initialNodes, initialEdges } from "./NodesEdges";
 
-// Function to send the POST request to the /api/train route
-const sendTrainRequest = async () => {
-  try {
-    const response = await fetch("/api/train", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+// Extract node IDs
+const nodeIds = initialNodes.map((node) => node.id);
 
-    if (response.ok) {
-      console.log("Training started");
-    } else {
-      console.error("Failed to start training", response.statusText);
-    }
-  } catch (error) {
-    console.error("Error during the request", error);
-  }
+// Extract edges data (source, target, weight)
+const edgesData = initialEdges.map((edge) => ({
+  source: edge.source,
+  target: edge.target,
+  weight: edge.weight,
+}));
+
+// Function that starts the training process with the graph data
+const startTraining = () => {
+  console.log("Training started with the following graph data:");
+
+  // Log the node IDs
+  console.log("Nodes:", nodeIds);
+
+  // Log the edges data
+  console.log("Edges:", edgesData);
 };
 
+// HomepageButtons component
 function HomepageButtons() {
+  // Call startTraining when the button is clicked
+  const handleTrainButtonClick = () => {
+    startTraining();
+  };
+
   return (
     <div className="flex space-x-6 mt-6">
       {/* Generate Graph Button */}
       <button className="rock-button">Generate a Graph</button>
 
       {/* Train Model Button */}
-      <button className="rock-button" onClick={sendTrainRequest}>
+      <button className="rock-button" onClick={handleTrainButtonClick}>
         Train my Model
       </button>
     </div>
