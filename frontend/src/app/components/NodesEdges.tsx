@@ -213,8 +213,8 @@ export const initialEdges = [
     source: "A",
     target: "F",
     style: { stroke: "black", strokeWidth: 3 },
-    weight: 30,
-    label: "30", // Adding label
+    weight: 10,
+    label: "10", // Adding label
     labelStyle: {
       fontSize: 18,
       fontFamily: "Halo Dek, Arial, Helvetica, sans-serif",

@@ -20,21 +20,26 @@ const FlowGraph = ({
 
   // Handle node click
   const onNodeClick = (_: React.MouseEvent, node: Node) => {
-    setClickCount((prevCount) => prevCount + 1); // Increment click count
-
-    if (clickCount % 2 === 0) {
-      // First click (starting point)
-      setStartingNode(node);
-    } else {
-      // Second click (ending point)
-      setEndingNode(node);
-    }
+    setClickCount((prevCount) => {
+      const newCount = prevCount + 1;
+      if (newCount % 2 === 1) {
+        setStartingNode(node);
+      } else {
+        setEndingNode(node);
+      }
+      return newCount;
+    });
   };
 
-  // Update the parent component when both nodes are set
   useEffect(() => {
     if (startingNode && endingNode) {
-      onStartEndNodeChange(startingNode, endingNode);
+      if (startingNode.id === endingNode.id) {
+        // If the same node is selected for both, reset them
+        setStartingNode(null);
+        setEndingNode(null);
+      } else {
+        onStartEndNodeChange(startingNode, endingNode);
+      }
     }
   }, [startingNode, endingNode, onStartEndNodeChange]);
 

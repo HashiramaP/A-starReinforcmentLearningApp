@@ -51,7 +51,11 @@ const aStar = (graph: any, start: any, goal: any, heuristic: any) => {
     openSet.sort((a: any, b: any) => a.priority - b.priority);
     const current = openSet.shift().node;
 
-    console.log("Processing Node:", current);
+    console.log("Processing Node ID:", current); // Log the current node ID
+    console.log(
+      "Processing Node:",
+      initialNodes.find((node) => node.id === current)
+    );
     console.log(
       "Open Set:",
       openSet.map((item: any) => item.node)
