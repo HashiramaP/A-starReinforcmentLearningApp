@@ -1,4 +1,5 @@
 import FlowGraph from "./components/FlowGraph";
+import HomepageButtons from "./components/HomepageButtons";
 import HomepageHeader from "./components/HomepageHeader";
 
 export default function Home() {
@@ -6,10 +7,7 @@ export default function Home() {
     <div className="flex flex-col items-center h-screen">
       <HomepageHeader />
       <FlowGraph />
-      <div className="flex space-x-6">
-        <button className="rock-button">Generate a Graph</button>
-        <button className="rock-button">Train my Model</button>
-      </div>
+      <HomepageButtons />
     </div>
   );
 }
