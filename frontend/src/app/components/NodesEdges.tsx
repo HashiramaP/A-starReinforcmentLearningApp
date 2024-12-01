@@ -196,8 +196,8 @@ export const initialEdges = [
     source: "A",
     target: "B",
     style: { stroke: "black", strokeWidth: 3 },
-    weight: Math.floor(Math.random() * 20) + 1,
-    label: `${Math.floor(Math.random() * 20) + 1}`, // Adding label
+    weight: 1,
+    label: "1", // Adding label
     labelStyle: {
       fontSize: 18,
       fontFamily: "Halo Dek, Arial, Helvetica, sans-serif",
@@ -213,8 +213,8 @@ export const initialEdges = [
     source: "A",
     target: "F",
     style: { stroke: "black", strokeWidth: 3 },
-    weight: Math.floor(Math.random() * 20) + 1,
-    label: `${Math.floor(Math.random() * 20) + 1}`, // Adding label
+    weight: 30,
+    label: "30", // Adding label
     labelStyle: {
       fontSize: 18,
       fontFamily: "Halo Dek, Arial, Helvetica, sans-serif",
@@ -230,8 +230,8 @@ export const initialEdges = [
     source: "B",
     target: "C",
     style: { stroke: "black", strokeWidth: 3 },
-    weight: Math.floor(Math.random() * 20) + 1,
-    label: `${Math.floor(Math.random() * 20) + 1}`, // Adding label
+    weight: 1,
+    label: "1", // Adding label
     labelStyle: {
       fontSize: 18,
       fontFamily: "Halo Dek, Arial, Helvetica, sans-serif",
@@ -247,8 +247,8 @@ export const initialEdges = [
     source: "C",
     target: "D",
     style: { stroke: "black", strokeWidth: 3 },
-    weight: Math.floor(Math.random() * 20) + 1,
-    label: `${Math.floor(Math.random() * 20) + 1}`, // Adding label
+    weight: 1,
+    label: "1", // Adding label
     labelStyle: {
       fontSize: 18,
       fontFamily: "Halo Dek, Arial, Helvetica, sans-serif",
@@ -260,12 +260,12 @@ export const initialEdges = [
     labelBgPadding: [2, 2], // Padding inside the background
   },
   {
-    id: "eD-E",
-    source: "E",
-    target: "D",
+    id: "eE-D",
+    source: "D",
+    target: "E",
     style: { stroke: "black", strokeWidth: 3 },
-    weight: Math.floor(Math.random() * 20) + 1,
-    label: `${Math.floor(Math.random() * 20) + 1}`, // Adding label
+    weight: 1,
+    label: "1", // Adding label
     labelStyle: {
       fontSize: 18,
       fontFamily: "Halo Dek, Arial, Helvetica, sans-serif",
