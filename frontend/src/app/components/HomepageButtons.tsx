@@ -3,43 +3,61 @@
 import React from "react";
 import { initialNodes, initialEdges } from "./NodesEdges";
 
-// Extract node IDs
-const nodeIds = initialNodes.map((node) => node.id);
-
-// Extract edges data (source, target, weight)
-const edgesData = initialEdges.map((edge) => ({
-  source: edge.source,
-  target: edge.target,
-  weight: edge.weight,
-}));
-
 // Function that starts the training process with the graph data
-const startTraining = () => {
+const startTraining = (startingNode: any, endingNode: any) => {
   console.log("Training started with the following graph data:");
 
   // Log the node IDs
-  console.log("Nodes:", nodeIds);
+  console.log(
+    "Nodes:",
+    initialNodes.map((node) => node.id)
+  );
 
   // Log the edges data
-  console.log("Edges:", edgesData);
+  console.log(
+    "Edges:",
+    initialEdges.map((edge) => ({
+      source: edge.source,
+      target: edge.target,
+      weight: edge.weight,
+    }))
+  );
+
+  // Log the starting and ending nodes if they exist
+  if (startingNode) {
+    console.log("Starting Node:", startingNode.data.label);
+  } else {
+    console.log("Starting Node is not set");
+  }
+
+  if (endingNode) {
+    console.log("Ending Node:", endingNode.data.label);
+  } else {
+    console.log("Ending Node is not set");
+  }
 };
 
-// HomepageButtons component
-function HomepageButtons() {
-  // Call startTraining when the button is clicked
-  const handleTrainButtonClick = () => {
-    startTraining();
-  };
-
+function HomepageButtons({
+  startingNode,
+  endingNode,
+}: {
+  startingNode: any;
+  endingNode: any;
+}) {
   return (
-    <div className="flex space-x-6 mt-6">
-      {/* Generate Graph Button */}
-      <button className="rock-button">Generate a Graph</button>
+    <div>
+      <div className="flex space-x-6 mt-6">
+        {/* Generate Graph Button */}
+        <button className="rock-button">Generate a Graph</button>
 
-      {/* Train Model Button */}
-      <button className="rock-button" onClick={handleTrainButtonClick}>
-        Train my Model
-      </button>
+        {/* Train Model Button */}
+        <button
+          className="rock-button"
+          onClick={() => startTraining(startingNode, endingNode)}
+        >
+          Train my Model
+        </button>
+      </div>
     </div>
   );
 }

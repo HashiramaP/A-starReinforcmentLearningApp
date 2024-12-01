@@ -1,13 +1,17 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactFlow, { Node } from "reactflow";
 import "reactflow/dist/style.css";
 import { initialNodes, initialEdges } from "./NodesEdges";
 
 const proOptions = { hideAttribution: true };
 
-const FlowGraph = () => {
+const FlowGraph = ({
+  onStartEndNodeChange,
+}: {
+  onStartEndNodeChange: (startNode: Node | null, endNode: Node | null) => void;
+}) => {
   const [nodes] = useState(initialNodes);
   const [edges] = useState(initialEdges);
   const [clickCount, setClickCount] = useState(0); // Track number of clicks
@@ -21,13 +25,18 @@ const FlowGraph = () => {
     if (clickCount % 2 === 0) {
       // First click (starting point)
       setStartingNode(node);
-      console.log(`Starting point is: ${node.data.label}`);
     } else {
       // Second click (ending point)
       setEndingNode(node);
-      console.log(`Ending point is: ${node.data.label}`);
     }
   };
+
+  // Update the parent component when both nodes are set
+  useEffect(() => {
+    if (startingNode && endingNode) {
+      onStartEndNodeChange(startingNode, endingNode);
+    }
+  }, [startingNode, endingNode, onStartEndNodeChange]);
 
   // Update node styles based on starting/ending state
   const updatedNodes = nodes.map((node: Node) => {
