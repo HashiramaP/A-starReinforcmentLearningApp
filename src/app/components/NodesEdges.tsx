@@ -206,7 +206,7 @@ export const initialEdges = [
     labelBgStyle: {
       fill: "#edc915",
     },
-    labelBgPadding: [2, 2], // Padding inside the background // Adding label
+    labelBgPadding: [2, 2] as [number, number], // Padding inside the background // Adding label
   },
   {
     id: "eF-A",
@@ -223,7 +223,7 @@ export const initialEdges = [
     labelBgStyle: {
       fill: "#edc915",
     },
-    labelBgPadding: [2, 2], // Padding inside the background
+    labelBgPadding: [2, 2] as [number, number], // Padding inside the background
   },
   {
     id: "eB-C",
@@ -240,7 +240,7 @@ export const initialEdges = [
     labelBgStyle: {
       fill: "#edc915",
     },
-    labelBgPadding: [2, 2], // Padding inside the background
+    labelBgPadding: [2, 2] as [number, number], // Padding inside the background
   },
   {
     id: "eC-D",
@@ -257,7 +257,7 @@ export const initialEdges = [
     labelBgStyle: {
       fill: "#edc915",
     },
-    labelBgPadding: [2, 2], // Padding inside the background
+    labelBgPadding: [2, 2] as [number, number], // Padding inside the background
   },
   {
     id: "eE-D",
@@ -274,7 +274,7 @@ export const initialEdges = [
     labelBgStyle: {
       fill: "#edc915",
     },
-    labelBgPadding: [2, 2], // Padding inside the background
+    labelBgPadding: [2, 2] as [number, number], // Padding inside the background
   },
   {
     id: "eE-F",
@@ -291,7 +291,7 @@ export const initialEdges = [
     labelBgStyle: {
       fill: "#edc915",
     },
-    labelBgPadding: [2, 2], // Padding inside the background
+    labelBgPadding: [2, 2] as [number, number], // Padding inside the background
   },
   {
     id: "eF-G",
@@ -308,7 +308,7 @@ export const initialEdges = [
     labelBgStyle: {
       fill: "#edc915",
     },
-    labelBgPadding: [2, 2], // Padding inside the background
+    labelBgPadding: [2, 2] as [number, number], // Padding inside the background
   },
   {
     id: "eG-H",
@@ -325,7 +325,7 @@ export const initialEdges = [
     labelBgStyle: {
       fill: "#edc915",
     },
-    labelBgPadding: [2, 2], // Padding inside the background
+    labelBgPadding: [2, 2] as [number, number], // Padding inside the background
   },
   {
     id: "eH-I",
@@ -342,7 +342,7 @@ export const initialEdges = [
     labelBgStyle: {
       fill: "#edc915",
     },
-    labelBgPadding: [2, 2], // Padding inside the background
+    labelBgPadding: [2, 2] as [number, number], // Padding inside the background
   },
   {
     id: "eI-J",
@@ -359,7 +359,7 @@ export const initialEdges = [
     labelBgStyle: {
       fill: "#edc915",
     },
-    labelBgPadding: [2, 2], // Padding inside the background
+    labelBgPadding: [2, 2] as [number, number], // Padding inside the background
   },
   {
     id: "eJ-K",
@@ -376,6 +376,6 @@ export const initialEdges = [
     labelBgStyle: {
       fill: "#edc915",
     },
-    labelBgPadding: [2, 2], // Padding inside the background
+    labelBgPadding: [2, 2] as [number, number], // Padding inside the background
   },
 ];

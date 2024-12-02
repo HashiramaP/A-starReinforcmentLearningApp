@@ -5,16 +5,20 @@ import { startTraining } from "../utils/trainingUtils";
 function HomepageButtons({
   startingNode,
   endingNode,
+  nodes,
+  edges,
   setIsTraining,
 }: {
   startingNode: any;
   endingNode: any;
+  nodes: any;
+  edges: any;
   setIsTraining: React.Dispatch<React.SetStateAction<boolean>>; // Add setIsTraining prop
 }) {
   // Function to start training
   const handleStartTraining = () => {
     setIsTraining(true); // Start training
-    startTraining(startingNode, endingNode); // Call the training logic from your utility
+    startTraining(startingNode, endingNode, nodes, edges); // Call the training logic from your utility
   };
 
   // Function to stop training (if needed)

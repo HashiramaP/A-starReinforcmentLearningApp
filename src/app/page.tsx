@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import * as tf from "@tensorflow/tfjs";
 import FlowGraph from "./components/FlowGraph";
 import HomepageButtons from "./components/HomepageButtons";
 import HomepageHeader from "./components/HomepageHeader";
@@ -59,57 +58,6 @@ export default function Home() {
     }
   };
 
-  // Simulate training process
-  useEffect(() => {
-    if (!isTraining) return;
-
-    const interval = setInterval(() => {
-      setNodes((prevNodes) =>
-        prevNodes.map((node) =>
-          Math.random() > 0.5
-            ? {
-                ...node,
-                style: {
-                  ...node.style,
-                  background: "orange", // Change node background color
-                },
-              }
-            : node
-        )
-      );
-    }, 1000);
-
-    return () => clearInterval(interval); // Cleanup interval
-  }, [isTraining]);
-
-  // TensorFlow.js setup
-  useEffect(() => {
-    const setupTensorFlow = async () => {
-      const backendSet = localStorage.getItem("tensorflow-backend-set");
-
-      if (!backendSet) {
-        console.log("Setting TensorFlow.js backend to cpu...");
-        await tf.setBackend("cpu");
-        await tf.ready();
-        localStorage.setItem("tensorflow-backend-set", "true");
-        console.log("TensorFlow.js is ready with backend:", tf.getBackend());
-      } else {
-        await tf.ready();
-        const currentBackend = tf.getBackend();
-        console.log("TensorFlow.js backend already set:", currentBackend);
-
-        if (currentBackend !== "cpu") {
-          console.log("Forcing TensorFlow.js backend to cpu...");
-          await tf.setBackend("cpu");
-          await tf.ready();
-          console.log("Backend set to cpu:", tf.getBackend());
-        }
-      }
-    };
-
-    setupTensorFlow();
-  }, []);
-
   return (
     <div className="flex flex-col items-center h-screen">
       <HomepageHeader />
@@ -121,6 +69,8 @@ export default function Home() {
       <HomepageButtons
         startingNode={startingNode}
         endingNode={endingNode}
+        nodes={nodes}
+        edges={edges}
         setIsTraining={setIsTraining} // Pass the setIsTraining function as a prop
       />
     </div>

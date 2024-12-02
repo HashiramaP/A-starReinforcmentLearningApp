@@ -1,197 +1,180 @@
-// trainingUtils.ts
 import * as tf from "@tensorflow/tfjs";
-import { initialNodes, initialEdges } from "../components/NodesEdges";
 
-// HeuristicGNN class for graph neural network
-class HeuristicGNN {
-  dense1: tf.Layer;
-  dense2: tf.Layer;
+// Function to convert nodes and edges into a feature vector for training
+const prepareInput = (
+  nodes: any[],
+  edges: any[],
+  startingNode: string,
+  endingNode: string
+) => {
+  const nodeIndexMap: { [key: string]: number } = {};
+  nodes.forEach((node, index) => {
+    nodeIndexMap[node.id] = index;
+  });
 
-  constructor(inputDim: number, hiddenDim: number) {
-    this.dense1 = tf.layers.dense({ units: hiddenDim, activation: "relu" });
-    this.dense2 = tf.layers.dense({ units: 1 }); // Output a heuristic value per node
-  }
+  const nodeFeatures: number[] = [];
+  nodes.forEach((node) => {
+    nodeFeatures.push(node.position.x, node.position.y);
+  });
 
-  call(inputs: tf.Tensor): tf.Tensor {
-    let x = this.dense1.apply(inputs) as tf.Tensor;
-    x = this.dense2.apply(x) as tf.Tensor;
-    return x;
-  }
+  const edgeFeatures: number[] = [];
+  edges.forEach((edge) => {
+    const sourceIndex = nodeIndexMap[edge.source];
+    const targetIndex = nodeIndexMap[edge.target];
+    edgeFeatures.push(sourceIndex, targetIndex, edge.weight);
+  });
 
-  createModel(inputDim: number, hiddenDim: number) {
-    const inputLayer = tf.input({ shape: [inputDim] });
-    const x = this.dense1.apply(inputLayer) as tf.Tensor;
-    const outputLayer = this.dense2.apply(x) as tf.Tensor;
-    return tf.model({ inputs: inputLayer, outputs: outputLayer });
-  }
-}
-
-// Helper function to compute rewards
-const computeReward = (pathLength: number, nodeExpansions: number): number => {
-  return -pathLength - 0.1 * nodeExpansions; // Example reward function
+  // Create a feature vector for the input to the model
+  const input = [...nodeFeatures, ...edgeFeatures];
+  return tf.tensor2d([input]); // return a 2D tensor (batch size 1)
 };
 
-// A* algorithm for pathfinding
-const aStar = (graph: any, start: any, goal: any, heuristic: any) => {
-  const openSet = [];
-  const cameFrom: { [key: string]: string } = {};
-  const gScore: { [key: string]: number } = {};
-  const fScore: { [key: string]: number } = {};
+// Create the model for training the heuristic
+const createHeuristicModel = (inputSize: number) => {
+  const model = tf.sequential();
+  model.add(
+    tf.layers.dense({ inputShape: [inputSize], units: 16, activation: "relu" })
+  );
+  model.add(tf.layers.dense({ units: 16, activation: "relu" }));
+  model.add(tf.layers.dense({ units: 1 })); // Output heuristic value
+  model.compile({ optimizer: "adam", loss: "meanSquaredError" });
+  return model;
+};
 
-  const nodeToIndex: { [key: string]: number } = {};
-  initialNodes.forEach((node, index) => {
-    nodeToIndex[node.id] = index; // Map node labels (like "A", "B", etc.) to indices
+// A* Algorithm with machine learning model for heuristic
+export const trainRLHeuristicAndFindPath = async (
+  startingNode: string,
+  endingNode: string,
+  nodes: any[],
+  edges: any[],
+  epochs: number = 100
+) => {
+  console.log("Training started...");
+
+  const inputTensor = prepareInput(nodes, edges, startingNode, endingNode);
+  const model = createHeuristicModel(inputTensor.shape[1]);
+
+  const target = tf.tensor2d([[Math.random()]]); // Example target heuristic value (random for now)
+
+  const heuristicsAtEachIteration: { [key: string]: number }[] = [];
+
+  // Training the model
+  for (let epoch = 0; epoch < epochs; epoch++) {
+    await model.fit(inputTensor, target, { epochs: 1 });
+
+    // Print heuristic for each node after each epoch
+    const nodeHeuristics: { [key: string]: number } = {};
+    nodes.forEach((node) => {
+      const nodeInput = prepareInput(nodes, edges, node.id, endingNode);
+      const heuristic = model.predict(nodeInput) as tf.Tensor;
+      nodeHeuristics[node.id] = heuristic.dataSync()[0];
+    });
+
+    heuristicsAtEachIteration.push(nodeHeuristics);
+    console.log(`Epoch ${epoch + 1} heuristics:`, nodeHeuristics);
+  }
+
+  console.log("Training complete.");
+
+  // A* algorithm to find the path
+  const openSet: string[] = [startingNode.id];
+  const cameFrom: { [key: string]: string | null } = {}; // To trace the path
+  const gScore: { [key: string]: number } = {}; // g-score for each node
+  const fScore: { [key: string]: number } = {}; // f-score for each node
+
+  // Initialize gScore and fScore for all nodes
+  nodes.forEach((node) => {
+    gScore[node.id] = Number.POSITIVE_INFINITY;
+    fScore[node.id] = Number.POSITIVE_INFINITY;
   });
 
-  initialNodes.forEach((node) => {
-    gScore[node.id] = Infinity;
-    fScore[node.id] = Infinity;
-  });
-  gScore[start] = 0;
-  fScore[start] = heuristic[nodeToIndex[start]][0];
-  openSet.push({ node: start, priority: fScore[start] });
+  // Set the gScore and fScore for the starting node
+  gScore[startingNode.id] = 0;
+  fScore[startingNode.id] =
+    heuristicsAtEachIteration[epochs - 1][startingNode.id];
+
+  // Initialize the starting node in the cameFrom object
+  cameFrom[startingNode.id] = null; // Starting node doesn't come from any other node
+
+  console.log("Starting A* Search...");
+  console.log("Starting node", startingNode);
 
   while (openSet.length > 0) {
-    openSet.sort((a: any, b: any) => a.priority - b.priority);
-    const current = openSet.shift().node;
-
-    console.log("Processing Node ID:", current); // Log the current node ID
-    console.log(
-      "Processing Node:",
-      initialNodes.find((node) => node.id === current)
+    // Get the node with the lowest f-score
+    console.log("Open set:", openSet);
+    const currentNodeId = openSet.reduce((a, b) =>
+      fScore[a] < fScore[b] ? a : b
     );
-    console.log(
-      "Open Set:",
-      openSet.map((item: any) => item.node)
-    );
-    console.log("gScore:", gScore);
+    console.log(`Processing node ${currentNodeId}`);
 
-    if (current === goal) {
-      return reconstructPath(cameFrom, current);
+    if (currentNodeId === endingNode.id) {
+      // Reconstruct the path
+      const path: string[] = [];
+      let current = currentNodeId;
+      while (current !== null) {
+        path.unshift(current);
+        current = cameFrom[current];
+      }
+      console.log("Final path:", path);
+      return { heuristicsAtEachIteration, finalPath: path };
     }
 
-    initialEdges.forEach((edge) => {
-      if (edge.source === current) {
-        const tentativeGScore = gScore[current] + edge.weight; // Use edge weight for gScore calculation
-        const neighbor = edge.target;
+    openSet.splice(openSet.indexOf(currentNodeId), 1); // Remove currentNode from openSet
 
-        console.log("Neighbor:", neighbor);
-        const neighborIndex = nodeToIndex[neighbor];
-        console.log("Index for neighbor:", neighborIndex);
+    // Find the neighbors of the current node
+    const neighbors = edges.filter(
+      (edge) => edge.source === currentNodeId || edge.target === currentNodeId
+    );
+    console.log(`Neighbors of ${currentNodeId}:`, neighbors);
 
-        // Ensure heuristic value exists for neighbor
-        const heuristicValue =
-          heuristic[neighborIndex] && heuristic[neighborIndex][0];
-        if (typeof heuristicValue === "undefined") {
-          console.error(`Heuristic value is missing for node ${neighbor}`);
-          return;
-        }
+    neighbors.forEach((neighbor) => {
+      const tentativeGScore = gScore[currentNodeId] + neighbor.weight;
+      console.log(
+        `Tentative GScore for ${neighbor.target}: ${tentativeGScore}`
+      );
 
-        console.log("Tentative gScore for neighbor:", tentativeGScore);
-        console.log("Current gScore for neighbor:", gScore[neighbor]);
+      if (tentativeGScore < gScore[neighbor.target]) {
+        cameFrom[neighbor.target] = currentNodeId;
+        gScore[neighbor.target] = tentativeGScore;
 
-        if (tentativeGScore < gScore[neighbor]) {
-          cameFrom[neighbor] = current;
-          gScore[neighbor] = tentativeGScore;
-          fScore[neighbor] = gScore[neighbor] + heuristicValue;
+        // Calculate the f-score (g-score + heuristic from the model)
+        const heuristic =
+          heuristicsAtEachIteration[epochs - 1][neighbor.target];
+        fScore[neighbor.target] = gScore[neighbor.target] + heuristic;
 
-          const existingNode = openSet.find(
-            (item: any) => item.node === neighbor
-          );
-          if (existingNode) {
-            existingNode.priority = fScore[neighbor]; // Update the priority
-          } else {
-            openSet.push({ node: neighbor, priority: fScore[neighbor] });
-          }
+        if (!openSet.includes(neighbor.target)) {
+          openSet.push(neighbor.target);
         }
       }
     });
+  }
 
-    console.log(
-      "Open Set after processing:",
-      openSet.map((item: any) => item.node)
+  console.log("No path found.");
+  return { heuristicsAtEachIteration, finalPath: [] };
+};
+
+// Start the training process
+export const startTraining = async (
+  startingNode: string,
+  endingNode: string,
+  nodes: any[],
+  edges: any[]
+) => {
+  console.log("Starting training...");
+  console.log("Nodes:", nodes);
+  console.log("Edges:", edges);
+
+  const { heuristicsAtEachIteration, finalPath } =
+    await trainRLHeuristicAndFindPath(
+      startingNode,
+      endingNode,
+      nodes,
+      edges,
+      100
     );
-  }
 
-  console.log("No path found");
-  return null;
-};
+  console.log("Heuristics at each iteration:", heuristicsAtEachIteration);
+  console.log("Final path:", finalPath);
 
-// Reconstruct the path by tracing the `cameFrom` map
-const reconstructPath = (cameFrom: any, current: any): any[] => {
-  const path = [current];
-  while (cameFrom[current]) {
-    current = cameFrom[current];
-    path.push(current);
-  }
-  return path.reverse();
-};
-
-// Function to generate a tensor of node features for TensorFlow.js
-const getGraphData = (graph: any, start: any, goal: any) => {
-  const nodePositions = {};
-  graph.forEach((_, node) => {
-    nodePositions[node] = [Math.random(), Math.random()]; // Random positions for nodes
-  });
-
-  const nodeFeatures = [];
-  graph.forEach((_, node) => {
-    nodeFeatures.push([
-      ...nodePositions[node], // Feature 1: node position
-      ...nodePositions[goal], // Feature 2: goal position
-    ]);
-  });
-
-  return tf.tensor(nodeFeatures);
-};
-
-// Training function to train the HeuristicGNN model
-export const startTraining = async (startingNode: any, endingNode: any) => {
-  const graph = new Map();
-  initialNodes.forEach((node) => graph.set(node.id, []));
-  initialEdges.forEach((edge) => {
-    graph.get(edge.source).push(edge.target);
-    graph.get(edge.target).push(edge.source); // Assuming undirected graph
-  });
-
-  const inputDim = 4; // 2 for node position, 2 for goal position
-  const hiddenDim = 16;
-  const gnn = new HeuristicGNN(inputDim, hiddenDim);
-  const model = gnn.createModel(inputDim, hiddenDim);
-
-  const optimizer = tf.train.adam(0.01); // Learning rate
-
-  const treatedNodes: string[] = [];
-
-  for (let episode = 0; episode < 50; episode++) {
-    const start = startingNode.id;
-    const goal = endingNode.id;
-
-    const nodeFeatures = getGraphData(graph, start, goal);
-    const heuristic = await model.predict(nodeFeatures).array();
-
-    const path = aStar(graph, start, goal, heuristic);
-    if (!path) continue;
-
-    const pathLength = path.length;
-    const nodeExpansions = initialNodes.length;
-    const reward = computeReward(pathLength, nodeExpansions);
-
-    console.log(`Episode ${episode}: Loss = ${-reward}, Path = ${path}`);
-
-    // Track nodes being treated (those in the path)
-    treatedNodes.push(...path);
-    try {
-      optimizer.minimize(() => {
-        const prediction = model.predict(nodeFeatures); // [numNodes, 1]
-        const target = tf.tensor(heuristic); // Ensure target is the same shape as prediction
-
-        const loss = tf.losses.meanSquaredError(target, prediction); // Now shapes should match
-
-        return loss;
-      });
-    } catch (error) {
-      console.error("Optimizer error:", error);
-    }
-  }
+  console.log("Training complete.");
 };
