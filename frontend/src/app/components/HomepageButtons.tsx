@@ -3,7 +3,11 @@ import React, { useEffect } from "react";
 import { initialNodes, initialEdges } from "./NodesEdges";
 import * as tf from "@tensorflow/tfjs";
 
+// HeuristicGNN class for graph neural network
 class HeuristicGNN {
+  dense1: tf.Layer;
+  dense2: tf.Layer;
+
   constructor(inputDim: number, hiddenDim: number) {
     this.dense1 = tf.layers.dense({ units: hiddenDim, activation: "relu" });
     this.dense2 = tf.layers.dense({ units: 1 }); // Output a heuristic value per node
@@ -28,6 +32,7 @@ const computeReward = (pathLength: number, nodeExpansions: number): number => {
   return -pathLength - 0.1 * nodeExpansions; // Example reward function
 };
 
+// A* algorithm for pathfinding
 const aStar = (graph: any, start: any, goal: any, heuristic: any) => {
   const openSet = [];
   const cameFrom: { [key: string]: string } = {};
@@ -141,6 +146,7 @@ const getGraphData = (graph: any, start: any, goal: any) => {
   return tf.tensor(nodeFeatures);
 };
 
+// Training function to train the HeuristicGNN model
 const startTraining = async (startingNode: any, endingNode: any) => {
   const graph = new Map();
   initialNodes.forEach((node) => graph.set(node.id, []));
@@ -191,7 +197,6 @@ const startTraining = async (startingNode: any, endingNode: any) => {
   }
 };
 
-// The component that starts the training process
 function HomepageButtons({
   startingNode,
   endingNode,
