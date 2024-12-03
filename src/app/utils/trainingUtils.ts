@@ -23,7 +23,7 @@ export const startTraining = async (
   const agent = new RLAgent(0.1, 0.9, 0.1);
 
   console.log("Training started. Beginning episodes...");
-  train(environment, agent, 100); // Train for 1000 episodes
+  train(environment, agent, 10); // Train for 1000 episodes
 };
 
 class GraphEnvironment {
@@ -80,37 +80,92 @@ class GraphEnvironment {
     return this.startingNode;
   }
 
-  updateColors = (currentNode: string, possibleActions: string[]) => {
+  resetNodeColors = () => {
+    // Reset all node colors to the default color except for the start and end nodes
     const updatedNodes = this.nodes.map((node) => ({
       ...node,
       style: {
         ...node.style,
         backgroundColor:
-          node.id === currentNode ? "orange" : node.style.backgroundColor,
+          node.id === this.startingNode
+            ? "#32CD32" // Starting node in green
+            : node.id === this.endingNode
+            ? "red" // Ending node in red
+            : "rgb(179, 170, 148)", // Default color for all other nodes
       },
     }));
 
+    // Set the updated node colors
+    this.setNodes(updatedNodes);
+  };
+
+  updateColors = (currentNode: string, possibleActions: string[]) => {
+    // Update node colors
+    const updatedNodes = this.nodes.map((node) => ({
+      ...node,
+      style: {
+        ...node.style,
+        backgroundColor:
+          node.id === currentNode
+            ? "orange" // Current node in orange
+            : node.id === this.startingNode
+            ? "#32CD32" // Starting node in green
+            : node.id === this.endingNode
+            ? "red" // Ending node in red
+            : possibleActions.includes(node.id)
+            ? "cyan" // Neighbor nodes in cyan
+            : node.style.backgroundColor || "rgb(179, 170, 148)", // Default color
+      },
+    }));
+
+    // Update edge colors
     const updatedEdges = this.edges.map((edge) => ({
       ...edge,
       style: {
         ...edge.style,
-        stroke: possibleActions.includes(edge.target)
-          ? "cyan"
-          : edge.style.stroke,
+        stroke: this.path.includes(edge.id) ? "red" : edge.style.stroke, // Apply color to the stroke
+      },
+      labelStyle: {
+        ...edge.labelStyle,
+        backgroundColor: this.path.includes(edge.id)
+          ? "red"
+          : edge.labelStyle.backgroundColor, // Optional: Update label background color
       },
     }));
 
-    const pathEdges = updatedEdges.map((edge) => ({
-      ...edge,
-      style: {
-        ...edge.style,
-        stroke: this.path.includes(edge.id) ? "red" : edge.style.stroke,
-      },
-    }));
+    // Update state to reflect changes
+    this.setEdges(updatedEdges);
 
+    // Set updated nodes and edges
     this.setNodes(updatedNodes);
-    this.setEdges(pathEdges);
   };
+
+  highlightShortestPath(shortestPath: string[]) {
+    // Update edge colors to highlight the shortest path
+    const updatedEdges = this.edges.map((edge) => {
+      const edgeId = `${edge.source}-${edge.target}`;
+      const isInShortestPath =
+        shortestPath.includes(edge.source) &&
+        shortestPath.includes(edge.target);
+
+      return {
+        ...edge,
+        style: {
+          ...edge.style,
+          stroke: isInShortestPath ? "red" : edge.style.stroke, // Apply red color to the stroke for edges in the shortest path
+        },
+        labelStyle: {
+          ...edge.labelStyle,
+          backgroundColor: isInShortestPath
+            ? "red"
+            : edge.labelStyle.backgroundColor, // Optional: Update label background color for shortest path edges
+        },
+      };
+    });
+
+    // Update state to reflect changes
+    this.setEdges(updatedEdges);
+  }
 
   // Add to the path after moving to a new node
   addToPath(edgeId: string) {
@@ -220,6 +275,21 @@ class RLAgent {
     }
     this.qTable[state][action] = value;
   }
+
+  // Trace the shortest path using the Q-table (after training)
+  getShortestPath(startingNode: string, endingNode: string): string[] {
+    let path: string[] = [startingNode];
+    let currentNode = startingNode;
+
+    while (currentNode !== endingNode) {
+      const possibleActions = Object.keys(this.qTable[currentNode] || {});
+      const nextAction = this.selectAction(currentNode, possibleActions); // Select the best action
+      path.push(nextAction);
+      currentNode = nextAction; // Move to the next state
+    }
+
+    return path; // Return the shortest path from start to end
+  }
 }
 
 const train = async (
@@ -243,6 +313,12 @@ const train = async (
       const currentEdgeId = `${state}-${action}`;
       environment.addToPath(currentEdgeId);
 
+      // Update the visualization immediately
+      environment.updateColors(state, possibleActions); // Pass empty array or current path
+
+      // Wait briefly to allow the user to see updates (optional, for visual effect)
+      await new Promise((resolve) => setTimeout(resolve, 500)); // 500ms delay
+
       // Get the reward and the next state
       const reward = environment.getReward(action);
       const nextState = action;
@@ -263,4 +339,17 @@ const train = async (
       }
     }
   }
+
+  // After training, get the shortest path
+  const shortestPath = agent.getShortestPath(
+    environment.startingNode,
+    environment.endingNode
+  );
+  console.log("Shortest Path:", shortestPath);
+
+  // Reset all node colors after training, leaving start and end nodes green and red
+  environment.resetNodeColors();
+
+  // Highlight the edges in the shortest path by making them red
+  environment.highlightShortestPath(shortestPath); // Pass the shortest path to highlight edges
 };

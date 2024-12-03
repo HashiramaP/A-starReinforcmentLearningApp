@@ -209,6 +209,40 @@ export const initialEdges = [
     labelBgPadding: [2, 2] as [number, number], // Padding inside the background // Adding label
   },
   {
+    id: "eE-J",
+    source: "E",
+    target: "J",
+    style: { stroke: "black", strokeWidth: 3 },
+    weight: 1,
+    label: "1", // Adding label
+    labelStyle: {
+      fontSize: 18,
+      fontFamily: "Halo Dek, Arial, Helvetica, sans-serif",
+      background: "rgb(179, 170, 148)",
+    },
+    labelBgStyle: {
+      fill: "#edc915",
+    },
+    labelBgPadding: [2, 2] as [number, number], // Padding inside the background // Adding label
+  },
+  {
+    id: "eF-I",
+    source: "F",
+    target: "I",
+    style: { stroke: "black", strokeWidth: 3 },
+    weight: 1,
+    label: "1", // Adding label
+    labelStyle: {
+      fontSize: 18,
+      fontFamily: "Halo Dek, Arial, Helvetica, sans-serif",
+      background: "rgb(179, 170, 148)",
+    },
+    labelBgStyle: {
+      fill: "#edc915",
+    },
+    labelBgPadding: [2, 2] as [number, number], // Padding inside the background // Adding label
+  },
+  {
     id: "eF-A",
     source: "A",
     target: "F",
