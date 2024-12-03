@@ -196,8 +196,8 @@ export const initialEdges = [
     source: "A",
     target: "B",
     style: { stroke: "black", strokeWidth: 3 },
-    weight: 1,
-    label: "1", // Adding label
+    weight: Math.floor(Math.random() * 20) + 1,
+    label: `${Math.floor(Math.random() * 20) + 1}`, // Adding label
     labelStyle: {
       fontSize: 18,
       fontFamily: "Halo Dek, Arial, Helvetica, sans-serif",
@@ -213,8 +213,8 @@ export const initialEdges = [
     source: "E",
     target: "J",
     style: { stroke: "black", strokeWidth: 3 },
-    weight: 1,
-    label: "1", // Adding label
+    weight: Math.floor(Math.random() * 20) + 1,
+    label: `${Math.floor(Math.random() * 20) + 1}`, // Adding label
     labelStyle: {
       fontSize: 18,
       fontFamily: "Halo Dek, Arial, Helvetica, sans-serif",
@@ -230,8 +230,8 @@ export const initialEdges = [
     source: "F",
     target: "I",
     style: { stroke: "black", strokeWidth: 3 },
-    weight: 1,
-    label: "1", // Adding label
+    weight: Math.floor(Math.random() * 20) + 1,
+    label: `${Math.floor(Math.random() * 20) + 1}`, // Adding label
     labelStyle: {
       fontSize: 18,
       fontFamily: "Halo Dek, Arial, Helvetica, sans-serif",
@@ -264,8 +264,8 @@ export const initialEdges = [
     source: "B",
     target: "C",
     style: { stroke: "black", strokeWidth: 3 },
-    weight: 1,
-    label: "1", // Adding label
+    weight: Math.floor(Math.random() * 20) + 1,
+    label: `${Math.floor(Math.random() * 20) + 1}`, // Adding label
     labelStyle: {
       fontSize: 18,
       fontFamily: "Halo Dek, Arial, Helvetica, sans-serif",
@@ -281,8 +281,8 @@ export const initialEdges = [
     source: "C",
     target: "D",
     style: { stroke: "black", strokeWidth: 3 },
-    weight: 1,
-    label: "1", // Adding label
+    weight: Math.floor(Math.random() * 20) + 1,
+    label: `${Math.floor(Math.random() * 20) + 1}`, // Adding label
     labelStyle: {
       fontSize: 18,
       fontFamily: "Halo Dek, Arial, Helvetica, sans-serif",
@@ -298,8 +298,8 @@ export const initialEdges = [
     source: "D",
     target: "E",
     style: { stroke: "black", strokeWidth: 3 },
-    weight: 1,
-    label: "1", // Adding label
+    weight: Math.floor(Math.random() * 20) + 1,
+    label: `${Math.floor(Math.random() * 20) + 1}`, // Adding label
     labelStyle: {
       fontSize: 18,
       fontFamily: "Halo Dek, Arial, Helvetica, sans-serif",
