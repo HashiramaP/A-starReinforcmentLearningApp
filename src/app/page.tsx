@@ -22,25 +22,33 @@ export default function Home() {
     if (endingNode) {
       console.log("Ending Node:", endingNode);
     }
-  }, [startingNode, endingNode]); // Dependency array ensures log is triggered on state change
+  }, [startingNode, endingNode]);
 
   // Apply styles to the nodes based on starting/ending node
   useEffect(() => {
     setNodes((prevNodes) =>
       prevNodes.map((node) => {
+        // Reset all nodes to default color
+        const defaultStyle = {
+          ...node.style,
+          background: "rgb(179, 170, 148)",
+        };
+
         if (node.id === startingNode?.id) {
           return {
             ...node,
-            style: { ...node.style, background: "#32CD32" }, // Green for starting node
+            style: { ...defaultStyle, background: "#32CD32" }, // Green for starting node
           };
         }
+
         if (node.id === endingNode?.id) {
           return {
             ...node,
-            style: { ...node.style, background: "red" }, // Red for ending node
+            style: { ...defaultStyle, background: "red" }, // Red for ending node
           };
         }
-        return node; // Return other nodes without changing style
+
+        return { ...node, style: defaultStyle }; // Return other nodes with default style
       })
     );
   }, [startingNode, endingNode]); // Re-run effect when startingNode or endingNode changes
@@ -48,13 +56,13 @@ export default function Home() {
   // Handle node click and update state after rendering
   const handleNodeClick = (node: Node) => {
     if (startingNode && endingNode) {
-      // Reset if the same node is selected
+      // If both nodes are selected, reset all and remove starting/ending nodes
       setStartingNode(null);
       setEndingNode(null);
     } else if (!startingNode) {
-      setStartingNode(node);
+      setStartingNode(node); // Set starting node
     } else if (!endingNode) {
-      setEndingNode(node);
+      setEndingNode(node); // Set ending node
     }
   };
 
