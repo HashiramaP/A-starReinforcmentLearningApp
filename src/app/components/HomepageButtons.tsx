@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import { startTraining } from "../utils/trainingUtils";
 
@@ -7,18 +6,22 @@ function HomepageButtons({
   endingNode,
   nodes,
   edges,
+  setNodes, // Add setNodes prop
+  setEdges, // Add setEdges prop
   setIsTraining,
 }: {
   startingNode: any;
   endingNode: any;
   nodes: any;
   edges: any;
-  setIsTraining: React.Dispatch<React.SetStateAction<boolean>>; // Add setIsTraining prop
+  setNodes: React.Dispatch<React.SetStateAction<any>>; // Add setNodes type
+  setEdges: React.Dispatch<React.SetStateAction<any>>; // Add setEdges type
+  setIsTraining: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   // Function to start training
   const handleStartTraining = () => {
     setIsTraining(true); // Start training
-    startTraining(startingNode, endingNode, nodes, edges); // Call the training logic from your utility
+    startTraining(startingNode, endingNode, nodes, edges, setNodes, setEdges); // Pass setNodes and setEdges to startTraining
   };
 
   // Function to stop training (if needed)

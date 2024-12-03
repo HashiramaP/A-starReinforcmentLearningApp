@@ -71,7 +71,9 @@ export default function Home() {
         endingNode={endingNode}
         nodes={nodes}
         edges={edges}
-        setIsTraining={setIsTraining} // Pass the setIsTraining function as a prop
+        setNodes={setNodes} // Pass setNodes here
+        setEdges={setEdges} // Pass setEdges here
+        setIsTraining={setIsTraining} // Pass setIsTraining as well
       />
     </div>
   );
