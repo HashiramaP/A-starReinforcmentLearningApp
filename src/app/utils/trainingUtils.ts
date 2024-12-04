@@ -1,5 +1,3 @@
-import * as tf from "@tensorflow/tfjs";
-
 export const startTraining = async (
   startingNode: any,
   endingNode: any,
@@ -7,12 +5,9 @@ export const startTraining = async (
   edges: any[],
   setNodes: React.Dispatch<React.SetStateAction<any>>, // Add setNodes here
   setEdges: React.Dispatch<React.SetStateAction<any>>, // Add setEdges here
-  iterations: number
+  iterations: number,
+  setNoPathFound: React.Dispatch<React.SetStateAction<boolean>> // Add setNoPathFound here
 ) => {
-  console.log("Starting training...");
-  console.log("Nodes:", nodes);
-  console.log("Edges:", edges);
-
   const environment = new GraphEnvironment(
     nodes,
     edges,
@@ -24,8 +19,7 @@ export const startTraining = async (
   const agent = new RLAgent(0.1, 0.9, 0.1);
 
   environment.resetEdgeColors(); // Reset edge colors before training
-  console.log("Training started. Beginning episodes...");
-  train(environment, agent, iterations); // Train for 1000 episodes
+  await train(environment, agent, iterations, setNoPathFound); // Train for 1000 episodes
 };
 
 class GraphEnvironment {
@@ -65,25 +59,21 @@ class GraphEnvironment {
     // Update node and edge colors
     this.updateColors(currentNode, actions);
 
-    console.log(`Possible actions from node ${currentNode}:`, actions);
     return actions;
   }
 
   // Reward function: Give positive reward when goal is reached, negative penalty for each move
   getReward(currentNode: string): number {
     const reward = currentNode === this.endingNode ? 10 : -1;
-    console.log(`Reward for node ${currentNode}: ${reward}`);
     return reward;
   }
 
   reset(): string {
-    console.log("Environment reset. Starting at node:", this.startingNode);
     this.path = []; // Reset path
     return this.startingNode;
   }
 
   resetNodeColors = () => {
-    console.log("Resetting node colors...");
     // Reset all node colors to the default color except for the start and end nodes
     const updatedNodes = this.nodes.map((node) => ({
       ...node,
@@ -145,30 +135,38 @@ class GraphEnvironment {
   };
 
   highlightShortestPath(shortestPath: string[]) {
-    // Update edge colors to highlight the shortest path
     const updatedEdges = this.edges.map((edge) => {
-      const edgeId = `${edge.source}-${edge.target}`;
-      const isInShortestPath =
-        shortestPath.includes(edge.source) &&
-        shortestPath.includes(edge.target);
+      // Determine if the edge is part of the shortest path
+      const isInShortestPath = (shortestPath) => {
+        for (let i = 0; i < shortestPath.length - 1; i++) {
+          const edgeIdForward = `e${shortestPath[i]}-${shortestPath[i + 1]}`;
+          const edgeIdBackward = `e${shortestPath[i + 1]}-${shortestPath[i]}`; // For undirected edges
+          if (edge.id === edgeIdForward || edge.id === edgeIdBackward) {
+            return true;
+          }
+        }
+        return false;
+      };
+
+      const inPath = isInShortestPath(shortestPath);
+
+      console.log(`Edge ${edge.id} in shortest path: ${inPath}`);
 
       return {
         ...edge,
         style: {
           ...edge.style,
-          stroke: isInShortestPath ? "red" : edge.style.stroke, // Apply red color to the stroke for edges in the shortest path
+          stroke: inPath ? "red" : edge.style.stroke, // Apply red color to the stroke
         },
         labelStyle: {
           ...edge.labelStyle,
-          backgroundColor: isInShortestPath
-            ? "red"
-            : edge.labelStyle.backgroundColor, // Optional: Update label background color for shortest path edges
+          backgroundColor: inPath ? "red" : edge.labelStyle.backgroundColor, // Optional: Update label background color
         },
       };
     });
 
-    // Update state to reflect changes
-    this.setEdges(updatedEdges);
+    // Update the edges in your graph state
+    this.edges = updatedEdges;
   }
 
   // Add to the path after moving to a new node
@@ -200,7 +198,6 @@ class RLAgent {
       // Explore: random action
       action =
         possibleActions[Math.floor(Math.random() * possibleActions.length)];
-      console.log(`Exploring: Selected random action: ${action}`); // Log exploration
     } else {
       // Exploit: select action with highest Q-value
       let bestAction = possibleActions[0];
@@ -215,9 +212,6 @@ class RLAgent {
       });
 
       action = bestAction;
-      console.log(
-        `Exploiting: Selected action: ${action} with Q-value: ${maxQValue}`
-      ); // Log exploitation
     }
     return action;
   }
@@ -235,7 +229,6 @@ class RLAgent {
     if (maxNextQValue === Infinity || maxNextQValue === -Infinity) {
       maxNextQValue = 0; // or some other value to handle edge cases
     }
-    console.log(`Max Q-value for next state ${nextState}: ${maxNextQValue}`);
     const currentQValue = this.getQValue(state, action);
 
     // Q-learning update rule
@@ -243,10 +236,6 @@ class RLAgent {
       currentQValue +
       this.alpha * (reward + this.gamma * maxNextQValue - currentQValue);
     this.setQValue(state, action, newQValue);
-
-    console.log(
-      `Q-table updated: State: ${state}, Action: ${action}, Reward: ${reward}, Next State: ${nextState}, New Q-value: ${newQValue}`
-    ); // Log Q-value update
   }
 
   // Get Q-value for a state-action pair
@@ -285,13 +274,18 @@ class RLAgent {
       if (possibleActions.length === 0) {
         // No neighbors, terminate the search or handle backtracking
         console.log(`No possible actions from ${currentNode}. Ending search.`);
-        // return an empty path
         return [];
       }
 
-      const nextAction = this.selectAction(currentNode, possibleActions); // Select the best action
-      path.push(nextAction);
-      currentNode = nextAction; // Move to the next state
+      // Ensure only one action is selected and is not a revisit
+      const nextAction = this.selectAction(currentNode, possibleActions);
+      if (!visitedNodes.has(nextAction)) {
+        path.push(nextAction);
+        currentNode = nextAction; // Move to the next state
+      } else {
+        console.log(`Dead end encountered at ${currentNode}.`);
+        return path; // Return the path so far if the next action leads to a dead end
+      }
     }
 
     return path; // Return the shortest path from start to end
@@ -301,12 +295,12 @@ class RLAgent {
 const train = async (
   environment: GraphEnvironment,
   agent: RLAgent,
-  numEpisodes: number
+  numEpisodes: number,
+  setNoPathFound: React.Dispatch<React.SetStateAction<boolean>> // Add setNoPathFound
 ) => {
   for (let episode = 0; episode < numEpisodes; episode++) {
     let state = environment.reset();
     let done = false;
-    console.log(`Episode ${episode + 1} started.`);
 
     while (!done) {
       // Get possible actions for the current state (node)
@@ -336,22 +330,21 @@ const train = async (
       state = nextState;
 
       // Log the agent's current state and action
-      console.log(`Agent moved to state: ${state}, Action: ${action}`);
 
       // if agent reaches a dead end, end the episode
       if (possibleActions.length === 0) {
         // move to the next episode
         done = true;
-        console.log(`Dead end reached at node: ${state}. Ending`);
       }
 
       // If goal is reached, end the episode
       if (state === environment.endingNode) {
         done = true;
-        console.log(`Goal reached at node: ${state}! Ending episode.`);
       }
     }
   }
+
+  console.log("Training completed.");
 
   // After training, get the shortest path
   const shortestPath = agent.getShortestPath(
@@ -361,13 +354,14 @@ const train = async (
   );
 
   if (shortestPath.length === 0) {
-    console.log("No path found. Please try again.");
+    setNoPathFound(true); // Set the state to display the "No Path Found" message
   } else {
-    console.log("Shortest Path:", shortestPath);
     // Highlight the edges in the shortest path by making them red
     environment.highlightShortestPath(shortestPath); // Pass the shortest path to highlight edges
+    environment.setEdges([...environment.edges]); // Trigger state update
+    console.log("Shortest path found:", shortestPath);
   }
+
   // Reset all node colors after training, leaving start and end nodes green and red
   environment.resetNodeColors();
-  return;
 };
