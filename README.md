@@ -1,31 +1,33 @@
-# A-starReinforcmentLearningApp
+# Graphrl
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Graphrl is a web application designed to visualize and train reinforcement learning models for graph-based problems. The app allows users to interact with graphs, set start and end nodes, and visualize the model's learning process in real-time.
 
-## Getting Started
+## Website
 
-First, install the requirements:
+[graphrl.com](https://graphrl.com)
 
-```bash
-npm install
-```
+## Features
 
-Then run the development server:
+- Visualize graph structures with interactive nodes and edges.
+- Set start and end nodes to train the reinforcement learning model.
+- Track the training process and adjust the number of iterations.
+- Easy-to-use interface for training and managing graphs.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Installation
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. Clone the repository:
 
-## Deploy on Vercel
+   ```bash
+   git clone https://github.com/yourusername/graphrl.git
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2. Install dependencies:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   ```bash
+   npm install
+   ```
+
+3. Run the app:
+   ```bash
+   npm run dev
+   ```
