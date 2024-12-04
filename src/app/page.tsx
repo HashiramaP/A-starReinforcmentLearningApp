@@ -31,20 +31,20 @@ export default function Home() {
         // Reset all nodes to default color
         const defaultStyle = {
           ...node.style,
-          background: "rgb(179, 170, 148)",
+          backgroundColor: "rgb(179, 170, 148)", // Use backgroundColor instead of background
         };
 
         if (node.id === startingNode?.id) {
           return {
             ...node,
-            style: { ...defaultStyle, background: "#32CD32" }, // Green for starting node
+            style: { ...defaultStyle, backgroundColor: "#32CD32" }, // Green for starting node
           };
         }
 
         if (node.id === endingNode?.id) {
           return {
             ...node,
-            style: { ...defaultStyle, background: "red" }, // Red for ending node
+            style: { ...defaultStyle, backgroundColor: "red" }, // Red for ending node
           };
         }
 

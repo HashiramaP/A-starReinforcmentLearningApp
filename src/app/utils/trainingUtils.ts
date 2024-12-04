@@ -125,6 +125,7 @@ class GraphEnvironment {
       ...node,
       style: {
         ...node.style,
+        // Instead of using `background`, use `backgroundColor` for consistency
         backgroundColor:
           node.id === currentNode
             ? "orange" // Current node in orange
@@ -137,24 +138,6 @@ class GraphEnvironment {
             : node.style.backgroundColor || "rgb(179, 170, 148)", // Default color
       },
     }));
-
-    // Update edge colors
-    const updatedEdges = this.edges.map((edge) => ({
-      ...edge,
-      style: {
-        ...edge.style,
-        stroke: this.path.includes(edge.id) ? "red" : edge.style.stroke, // Apply color to the stroke
-      },
-      labelStyle: {
-        ...edge.labelStyle,
-        backgroundColor: this.path.includes(edge.id)
-          ? "red"
-          : edge.labelStyle.backgroundColor, // Optional: Update label background color
-      },
-    }));
-
-    // Update state to reflect changes
-    this.setEdges(updatedEdges);
 
     // Set updated nodes and edges
     this.setNodes(updatedNodes);
