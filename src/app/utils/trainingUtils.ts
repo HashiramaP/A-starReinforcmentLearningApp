@@ -152,17 +152,16 @@ class GraphEnvironment {
 
       const inPath = isInShortestPath(shortestPath);
 
+      // Update the style and labelStyle based on whether the edge is in the path
       return {
         ...edge,
         style: {
-          ...edge.style,
-          stroke: inPath ? "red" : edge.style?.stroke || "black", // Apply red color to the stroke
+          ...edge.style, // Ensure any previous styles are preserved
+          stroke: inPath ? "red" : "black", // Apply red color to the stroke if in path, else black
         },
         labelStyle: {
-          ...edge.labelStyle,
-          backgroundColor: inPath
-            ? "red"
-            : edge.labelStyle?.backgroundColor ?? "rgb(179, 170, 148)", // Optional: Update label background color
+          ...edge.labelStyle, // Ensure labelStyle is also updated
+          backgroundColor: inPath ? "red" : "rgb(179, 170, 148)", // Change label background if in path
         },
       };
     });
