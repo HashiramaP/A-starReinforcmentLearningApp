@@ -150,8 +150,6 @@ class GraphEnvironment {
 
       const inPath = isInShortestPath(shortestPath);
 
-      console.log(`Edge ${edge.id} in shortest path: ${inPath}`);
-
       return {
         ...edge,
         style: {
@@ -264,7 +262,6 @@ class RLAgent {
 
     while (currentNode !== endingNode) {
       if (visitedNodes.has(currentNode)) {
-        console.log("Dead end encountered. No further progress can be made.");
         return path; // Return the path so far if a dead-end is encountered
       }
 
@@ -273,7 +270,6 @@ class RLAgent {
       const possibleActions = Object.keys(this.qTable[currentNode] || {});
       if (possibleActions.length === 0) {
         // No neighbors, terminate the search or handle backtracking
-        console.log(`No possible actions from ${currentNode}. Ending search.`);
         return [];
       }
 
@@ -283,7 +279,6 @@ class RLAgent {
         path.push(nextAction);
         currentNode = nextAction; // Move to the next state
       } else {
-        console.log(`Dead end encountered at ${currentNode}.`);
         return path; // Return the path so far if the next action leads to a dead end
       }
     }
@@ -344,8 +339,6 @@ const train = async (
     }
   }
 
-  console.log("Training completed.");
-
   // After training, get the shortest path
   const shortestPath = agent.getShortestPath(
     environment.startingNode,
@@ -359,7 +352,6 @@ const train = async (
     // Highlight the edges in the shortest path by making them red
     environment.highlightShortestPath(shortestPath); // Pass the shortest path to highlight edges
     environment.setEdges([...environment.edges]); // Trigger state update
-    console.log("Shortest path found:", shortestPath);
   }
 
   // Reset all node colors after training, leaving start and end nodes green and red

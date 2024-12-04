@@ -1,97 +1,33 @@
-"use client";
-
-import React, { useState, useEffect } from "react";
-import FlowGraph from "./components/FlowGraph";
-import HomepageButtons from "./components/HomepageButtons";
+import React from "react";
 import HomepageHeader from "./components/HomepageHeader";
-import { Node, Edge } from "reactflow";
-import { initialNodes, initialEdges } from "./components/NodesEdges";
+import GraphNTraining from "./components/GraphNTraining";
 
 export default function Home() {
-  const [startingNode, setStartingNode] = useState<Node | null>(null);
-  const [endingNode, setEndingNode] = useState<Node | null>(null);
-  const [nodes, setNodes] = useState<Node[]>(initialNodes);
-  const [edges, setEdges] = useState<Edge[]>(initialEdges);
-  const [isTraining, setIsTraining] = useState(false); // State for controlling training
-
-  // Log the nodes whenever they change
-  useEffect(() => {
-    if (startingNode) {
-      console.log("Starting Node:", startingNode);
-    }
-    if (endingNode) {
-      console.log("Ending Node:", endingNode);
-    }
-  }, [startingNode, endingNode]);
-
-  // Apply styles to the nodes based on starting/ending node
-  useEffect(() => {
-    setNodes((prevNodes) =>
-      prevNodes.map((node) => {
-        // Reset all nodes to default color
-        const defaultStyle = {
-          ...node.style,
-          backgroundColor: "rgb(179, 170, 148)", // Use backgroundColor instead of background
-        };
-
-        if (node.id === startingNode?.id) {
-          return {
-            ...node,
-            style: { ...defaultStyle, backgroundColor: "#32CD32" }, // Green for starting node
-          };
-        }
-
-        if (node.id === endingNode?.id) {
-          return {
-            ...node,
-            style: { ...defaultStyle, backgroundColor: "red" }, // Red for ending node
-          };
-        }
-
-        return { ...node, style: defaultStyle }; // Return other nodes with default style
-      })
-    );
-    setEdges((prevEdges) =>
-      prevEdges.map((edge) => {
-        // Reset all edges to default color
-        return {
-          ...edge,
-          style: { stroke: "black", strokeWidth: 3 },
-        };
-      })
-    );
-  }, [startingNode, endingNode]); // Re-run effect when startingNode or endingNode changes
-
-  // Handle node click and update state after rendering
-  const handleNodeClick = (node: Node) => {
-    if (startingNode && endingNode) {
-      // If both nodes are selected, reset all and remove starting/ending nodes
-      setStartingNode(null);
-      setEndingNode(null);
-    } else if (!startingNode) {
-      setStartingNode(node); // Set starting node
-    } else if (!endingNode) {
-      setEndingNode(node); // Set ending node
-    }
-  };
-
   return (
-    <div className="flex flex-col items-center h-screen">
-      <HomepageHeader />
-      <FlowGraph
-        nodes={nodes}
-        edges={edges}
-        onNodeClick={handleNodeClick} // Pass handler
-      />
-      <HomepageButtons
-        startingNode={startingNode}
-        endingNode={endingNode}
-        nodes={nodes}
-        edges={edges}
-        setNodes={setNodes} // Pass setNodes here
-        setEdges={setEdges} // Pass setEdges here
-        setIsTraining={setIsTraining} // Pass setIsTraining as well
-      />
+    <div>
+      {/* Server-side rendered components */}
+      <div className="flex flex-col items-center relative">
+        <HomepageHeader />
+        {/* GitHub Logo */}
+        <a
+          href="https://github.com/HashiramaP/A-starReinforcmentLearningApp/tree/main"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="absolute top-4 left-4"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="w-8 h-8 text-gray-800 hover:text-black"
+          >
+            <path d="M12 0a12 12 0 0 0-3.796 23.386c.6.111.819-.261.819-.578v-2.017c-3.337.726-4.042-1.61-4.042-1.61-.546-1.386-1.333-1.755-1.333-1.755-1.09-.745.082-.729.082-.729 1.205.086 1.838 1.238 1.838 1.238 1.072 1.836 2.81 1.306 3.494.999.109-.776.419-1.306.763-1.607-2.665-.304-5.467-1.336-5.467-5.943 0-1.313.468-2.386 1.235-3.226-.124-.303-.535-1.527.117-3.184 0 0 1.008-.322 3.3 1.23a11.516 11.516 0 0 1 6.003 0c2.291-1.552 3.298-1.23 3.298-1.23.653 1.657.242 2.88.118 3.184.768.84 1.234 1.913 1.234 3.226 0 4.618-2.805 5.635-5.476 5.931.43.37.815 1.102.815 2.222v3.293c0 .319.218.693.825.577A12 12 0 0 0 12 0z" />
+          </svg>
+        </a>
+      </div>
+
+      {/* Client-side components */}
+      <GraphNTraining />
     </div>
   );
 }
