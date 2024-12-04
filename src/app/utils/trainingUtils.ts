@@ -135,6 +135,7 @@ class GraphEnvironment {
   };
 
   highlightShortestPath(shortestPath: string[]) {
+    console.log("Shortest path:", shortestPath);
     const updatedEdges = this.edges.map((edge) => {
       // Determine if the edge is part of the shortest path
       const isInShortestPath = (shortestPath) => {
@@ -147,6 +148,8 @@ class GraphEnvironment {
         }
         return false;
       };
+
+      const inPath = isInShortestPath(shortestPath);
 
       return {
         ...edge,
