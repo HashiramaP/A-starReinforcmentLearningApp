@@ -13,6 +13,8 @@ export default function GraphNTraining() {
   const [edges, setEdges] = useState<Edge[]>(initialEdges);
   const [isTraining, setIsTraining] = useState(false);
 
+  console.log(isTraining);
+
   // Log the nodes whenever they change
   useEffect(() => {
     if (startingNode) console.log("Starting Node:", startingNode);

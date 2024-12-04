@@ -11,12 +11,12 @@ function HomepageButtons({
   setEdges, // Add setEdges prop
   setIsTraining,
 }: {
-  startingNode: any;
-  endingNode: any;
-  nodes: any;
-  edges: any;
-  setNodes: React.Dispatch<React.SetStateAction<any>>; // Add setNodes type
-  setEdges: React.Dispatch<React.SetStateAction<any>>; // Add setEdges type
+  startingNode: unknown;
+  endingNode: unknown;
+  nodes: unknown;
+  edges: unknown;
+  setNodes: React.Dispatch<React.SetStateAction<unknown>>; // Add setNodes type
+  setEdges: React.Dispatch<React.SetStateAction<unknown>>; // Add setEdges type
   setIsTraining: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [iterations, setIterations] = useState(1); // State to hold the number of iterations
@@ -79,7 +79,7 @@ function HomepageButtons({
       {/* Display No Path Found message */}
       {noPathFound && (
         <div className="no-path-message">
-          Agent Coouldn't find a Path
+          Agent Couldn&apos;t find a Path
           <button className="close-btn" onClick={handleClose}>
             &times; {/* Close icon */}
           </button>
