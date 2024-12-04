@@ -6,7 +6,8 @@ export const startTraining = async (
   nodes: any[],
   edges: any[],
   setNodes: React.Dispatch<React.SetStateAction<any>>, // Add setNodes here
-  setEdges: React.Dispatch<React.SetStateAction<any>> // Add setEdges here
+  setEdges: React.Dispatch<React.SetStateAction<any>>, // Add setEdges here
+  iterations: number
 ) => {
   console.log("Starting training...");
   console.log("Nodes:", nodes);
@@ -24,7 +25,7 @@ export const startTraining = async (
 
   environment.resetEdgeColors(); // Reset edge colors before training
   console.log("Training started. Beginning episodes...");
-  train(environment, agent, 10); // Train for 1000 episodes
+  train(environment, agent, iterations); // Train for 1000 episodes
 };
 
 class GraphEnvironment {
