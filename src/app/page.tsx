@@ -51,6 +51,15 @@ export default function Home() {
         return { ...node, style: defaultStyle }; // Return other nodes with default style
       })
     );
+    setEdges((prevEdges) =>
+      prevEdges.map((edge) => {
+        // Reset all edges to default color
+        return {
+          ...edge,
+          style: { stroke: "black", strokeWidth: 3 },
+        };
+      })
+    );
   }, [startingNode, endingNode]); // Re-run effect when startingNode or endingNode changes
 
   // Handle node click and update state after rendering

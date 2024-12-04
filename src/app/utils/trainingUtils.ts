@@ -22,8 +22,9 @@ export const startTraining = async (
   );
   const agent = new RLAgent(0.1, 0.9, 0.1);
 
+  environment.resetEdgeColors(); // Reset edge colors before training
   console.log("Training started. Beginning episodes...");
-  train(environment, agent, 5); // Train for 1000 episodes
+  train(environment, agent, 10); // Train for 1000 episodes
 };
 
 class GraphEnvironment {
@@ -81,6 +82,7 @@ class GraphEnvironment {
   }
 
   resetNodeColors = () => {
+    console.log("Resetting node colors...");
     // Reset all node colors to the default color except for the start and end nodes
     const updatedNodes = this.nodes.map((node) => ({
       ...node,
@@ -97,6 +99,24 @@ class GraphEnvironment {
 
     // Set the updated node colors
     this.setNodes(updatedNodes);
+  };
+
+  resetEdgeColors = () => {
+    // Reset all edge colors to the default color
+    const updatedEdges = this.edges.map((edge) => ({
+      ...edge,
+      style: {
+        ...edge.style,
+        stroke: "black", // Default color for all edges
+      },
+      labelStyle: {
+        ...edge.labelStyle,
+        backgroundColor: "rgb(179, 170, 148)", // Default color for all edge labels
+      },
+    }));
+
+    // Set the updated edge colors
+    this.setEdges(updatedEdges);
   };
 
   updateColors = (currentNode: string, possibleActions: string[]) => {
@@ -281,7 +301,8 @@ class RLAgent {
       if (possibleActions.length === 0) {
         // No neighbors, terminate the search or handle backtracking
         console.log(`No possible actions from ${currentNode}. Ending search.`);
-        return path; // Or you could return an error here if backtracking is not possible
+        // return an empty path
+        return [];
       }
 
       const nextAction = this.selectAction(currentNode, possibleActions); // Select the best action
@@ -354,11 +375,15 @@ const train = async (
     environment.endingNode,
     environment.nodes
   );
-  console.log("Shortest Path:", shortestPath);
 
+  if (shortestPath.length === 0) {
+    console.log("No path found. Please try again.");
+  } else {
+    console.log("Shortest Path:", shortestPath);
+    // Highlight the edges in the shortest path by making them red
+    environment.highlightShortestPath(shortestPath); // Pass the shortest path to highlight edges
+  }
   // Reset all node colors after training, leaving start and end nodes green and red
   environment.resetNodeColors();
-
-  // Highlight the edges in the shortest path by making them red
-  environment.highlightShortestPath(shortestPath); // Pass the shortest path to highlight edges
+  return;
 };
