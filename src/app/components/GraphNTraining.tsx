@@ -13,7 +13,9 @@ export default function GraphNTraining() {
   const [edges, setEdges] = useState<Edge[]>(initialEdges);
   const [isTraining, setIsTraining] = useState(false);
 
-  console.log(isTraining);
+  if (isTraining) {
+    // Do nothing
+  }
 
   // Apply styles to nodes based on selection
   useEffect(() => {

@@ -27,27 +27,27 @@ function HomepageButtons({
 
   // Function to start training
   const handleStartTraining = () => {
-    if (!startingNode || !endingNode) {
+    if (!startingNode.id || !endingNode.id) {
       // If either startingNode or endingNode is not selected
+      console.log("Please select a starting and ending point");
       setNoStartEndSelected(true); // Show message
       setNoPathFound(false); // Hide the "No Path Found" message
-      return; // Do not proceed with the training
+      return;
+    } else {
+      setIsTraining(true); // Start training
+      setNoStartEndSelected(false); // Hide the "Please select a starting and ending point" message
+      setNoPathFound(false); // Reset the state before starting training
+      startTraining(
+        startingNode,
+        endingNode,
+        nodes,
+        edges,
+        setNodes,
+        setEdges,
+        iterations,
+        setNoPathFound // Pass setNoPathFound to update the state in case of no path
+      );
     }
-
-    setIsTraining(true); // Start training
-    setNoStartEndSelected(false); // Hide the "Please select a starting and ending point" message
-    setNoPathFound(false); // Reset the state before starting training
-
-    startTraining(
-      startingNode,
-      endingNode,
-      nodes,
-      edges,
-      setNodes,
-      setEdges,
-      iterations,
-      setNoPathFound // Pass setNoPathFound to update the state in case of no path
-    );
   };
 
   // Function to close the "No Path Found" message

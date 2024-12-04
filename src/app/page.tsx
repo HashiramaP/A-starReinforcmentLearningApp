@@ -1,6 +1,7 @@
 import React from "react";
 import HomepageHeader from "./components/HomepageHeader";
 import GraphNTraining from "./components/GraphNTraining";
+import RulesClose from "./components/RulesClose";
 
 export default function Home() {
   return (
@@ -26,6 +27,7 @@ export default function Home() {
         </a>
       </div>
 
+      <RulesClose />
       {/* Client-side components */}
       <GraphNTraining />
     </div>
