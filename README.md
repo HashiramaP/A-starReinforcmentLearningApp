@@ -18,7 +18,7 @@ Graphrl is a web application designed to visualize and train reinforcement learn
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/yourusername/graphrl.git
+   git clone https://github.com/HashiramaP/GraphReinforcmentLearning
    ```
 
 2. Install dependencies:
