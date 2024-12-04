@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { startTraining } from "../utils/trainingUtils";
 import Episodes from "./Episodes";
+import { Node, Edge } from "@reactflow/core"; // Ensure this is imported
 
 function HomepageButtons({
   startingNode,
@@ -11,12 +12,13 @@ function HomepageButtons({
   setEdges, // Add setEdges prop
   setIsTraining,
 }: {
-  startingNode: unknown;
-  endingNode: unknown;
-  nodes: unknown;
-  edges: unknown;
-  setNodes: React.Dispatch<React.SetStateAction<unknown>>; // Add setNodes type
-  setEdges: React.Dispatch<React.SetStateAction<unknown>>; // Add setEdges type
+  startingNode: { id: string };
+  endingNode: { id: string };
+  nodes: Node[];
+  edges: Edge[];
+  setNodes: React.Dispatch<React.SetStateAction<Node[]>>;
+
+  setEdges: React.Dispatch<React.SetStateAction<Edge[]>>;
   setIsTraining: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [iterations, setIterations] = useState(1); // State to hold the number of iterations

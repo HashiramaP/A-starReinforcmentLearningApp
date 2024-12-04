@@ -7,19 +7,13 @@ import FlowGraph from "./FlowGraph";
 import HomepageButtons from "./HomepageButtons";
 
 export default function GraphNTraining() {
-  const [startingNode, setStartingNode] = useState<Node | null>(null);
-  const [endingNode, setEndingNode] = useState<Node | null>(null);
+  const [startingNode, setStartingNode] = useState<Node | undefined>(undefined);
+  const [endingNode, setEndingNode] = useState<Node | undefined>(undefined);
   const [nodes, setNodes] = useState<Node[]>(initialNodes);
   const [edges, setEdges] = useState<Edge[]>(initialEdges);
   const [isTraining, setIsTraining] = useState(false);
 
   console.log(isTraining);
-
-  // Log the nodes whenever they change
-  useEffect(() => {
-    if (startingNode) console.log("Starting Node:", startingNode);
-    if (endingNode) console.log("Ending Node:", endingNode);
-  }, [startingNode, endingNode]);
 
   // Apply styles to nodes based on selection
   useEffect(() => {
@@ -54,8 +48,8 @@ export default function GraphNTraining() {
 
   const handleNodeClick = (node: Node) => {
     if (startingNode && endingNode) {
-      setStartingNode(null);
-      setEndingNode(null);
+      setStartingNode(undefined);
+      setEndingNode(undefined);
     } else if (!startingNode) {
       setStartingNode(node);
     } else if (!endingNode) {
@@ -67,8 +61,8 @@ export default function GraphNTraining() {
     <div className="flex flex-col items-center h-screen">
       <FlowGraph nodes={nodes} edges={edges} onNodeClick={handleNodeClick} />
       <HomepageButtons
-        startingNode={startingNode}
-        endingNode={endingNode}
+        startingNode={startingNode ? startingNode : { id: "" }}
+        endingNode={endingNode ? endingNode : { id: "" }}
         nodes={nodes}
         edges={edges}
         setNodes={setNodes}

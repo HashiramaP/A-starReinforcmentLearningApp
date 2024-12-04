@@ -1,10 +1,12 @@
+import { Node, Edge } from "@reactflow/core"; // Ensure this is imported
+
 export const startTraining = async (
-  startingNode: any,
-  endingNode: any,
-  nodes: any[],
-  edges: any[],
-  setNodes: React.Dispatch<React.SetStateAction<any>>, // Add setNodes here
-  setEdges: React.Dispatch<React.SetStateAction<any>>, // Add setEdges here
+  startingNode: { id: string },
+  endingNode: { id: string },
+  nodes: Node[],
+  edges: Edge[],
+  setNodes: React.Dispatch<React.SetStateAction<Node[]>>, // Add setNodes here
+  setEdges: React.Dispatch<React.SetStateAction<Edge[]>>, // Add setEdges here
   iterations: number,
   setNoPathFound: React.Dispatch<React.SetStateAction<boolean>> // Add setNoPathFound here
 ) => {
@@ -23,21 +25,21 @@ export const startTraining = async (
 };
 
 class GraphEnvironment {
-  nodes: any[];
-  edges: any[];
+  nodes: Node[];
+  edges: Edge[];
   startingNode: string;
   endingNode: string;
-  setNodes: React.Dispatch<React.SetStateAction<any>>; // Add setNodes here
-  setEdges: React.Dispatch<React.SetStateAction<any>>; // Add setEdges here
+  setNodes: React.Dispatch<React.SetStateAction<Node[]>>; // Add setNodes here
+  setEdges: React.Dispatch<React.SetStateAction<Edge[]>>; // Add setEdges here
   path: string[]; // Track the current path
 
   constructor(
-    nodes: any[],
-    edges: any[],
+    nodes: Node[],
+    edges: Edge[],
     startingNode: string,
     endingNode: string,
-    setNodes: React.Dispatch<React.SetStateAction<any>>,
-    setEdges: React.Dispatch<React.SetStateAction<any>>
+    setNodes: React.Dispatch<React.SetStateAction<Node[]>>,
+    setEdges: React.Dispatch<React.SetStateAction<Edge[]>>
   ) {
     this.nodes = nodes;
     this.edges = edges;
@@ -126,7 +128,7 @@ class GraphEnvironment {
             ? "red" // Ending node in red
             : possibleActions.includes(node.id)
             ? "cyan" // Neighbor nodes in cyan
-            : node.style.backgroundColor || "rgb(179, 170, 148)", // Default color
+            : node.style?.backgroundColor || "rgb(179, 170, 148)", // Default color
       },
     }));
 
@@ -135,10 +137,9 @@ class GraphEnvironment {
   };
 
   highlightShortestPath(shortestPath: string[]) {
-    console.log("Shortest path:", shortestPath);
     const updatedEdges = this.edges.map((edge) => {
       // Determine if the edge is part of the shortest path
-      const isInShortestPath = (shortestPath) => {
+      const isInShortestPath = (shortestPath: string[]) => {
         for (let i = 0; i < shortestPath.length - 1; i++) {
           const edgeIdForward = `e${shortestPath[i]}-${shortestPath[i + 1]}`;
           const edgeIdBackward = `e${shortestPath[i + 1]}-${shortestPath[i]}`; // For undirected edges
@@ -155,11 +156,13 @@ class GraphEnvironment {
         ...edge,
         style: {
           ...edge.style,
-          stroke: inPath ? "red" : edge.style.stroke, // Apply red color to the stroke
+          stroke: inPath ? "red" : edge.style?.stroke || "black", // Apply red color to the stroke
         },
         labelStyle: {
           ...edge.labelStyle,
-          backgroundColor: inPath ? "red" : edge.labelStyle.backgroundColor, // Optional: Update label background color
+          backgroundColor: inPath
+            ? "red"
+            : edge.labelStyle?.backgroundColor ?? "rgb(179, 170, 148)", // Optional: Update label background color
         },
       };
     });
@@ -176,11 +179,11 @@ class GraphEnvironment {
   }
 }
 class RLAgent {
-  qTable: any; // Q-value table
+  qTable: { [state: string]: { [action: string]: number } }; // Q-value table
   alpha: number; // Learning rate
   gamma: number; // Discount factor
   epsilon: number; // Exploration rate
-  nodes: any[];
+  nodes: unknown[];
 
   constructor(alpha: number, gamma: number, epsilon: number) {
     this.qTable = {}; // Initialize Q-table as an empty object
@@ -223,7 +226,7 @@ class RLAgent {
     nextState: string
   ) {
     let maxNextQValue = Math.max(
-      ...Object.values(this.qTable[nextState] || {})
+      ...Object.values(this.qTable[nextState] || {}).map((value) => value)
     );
     if (maxNextQValue === Infinity || maxNextQValue === -Infinity) {
       maxNextQValue = 0; // or some other value to handle edge cases
@@ -251,13 +254,8 @@ class RLAgent {
   }
 
   // Trace the shortest path using the Q-table (after training)
-  getShortestPath(
-    startingNode: string,
-    endingNode: string,
-    nodes: any
-  ): string[] {
-    const allNodesId = nodes.map((node: any) => node.id);
-    let path: string[] = [startingNode];
+  getShortestPath(startingNode: string, endingNode: string): string[] {
+    const path: string[] = [startingNode];
     let currentNode = startingNode;
     const visitedNodes = new Set<string>(); // Track visited nodes
 
@@ -343,8 +341,7 @@ const train = async (
   // After training, get the shortest path
   const shortestPath = agent.getShortestPath(
     environment.startingNode,
-    environment.endingNode,
-    environment.nodes
+    environment.endingNode
   );
 
   // if the end node is not in the shortest path, set the state to display the "No Path Found" message
