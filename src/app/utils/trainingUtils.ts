@@ -148,8 +148,6 @@ class GraphEnvironment {
         return false;
       };
 
-      const inPath = isInShortestPath(shortestPath);
-
       return {
         ...edge,
         style: {
@@ -346,7 +344,10 @@ const train = async (
     environment.nodes
   );
 
-  if (shortestPath.length === 0) {
+  // if the end node is not in the shortest path, set the state to display the "No Path Found" message
+  if (!shortestPath.includes(environment.endingNode)) {
+    setNoPathFound(true);
+  } else if (shortestPath.length === 0) {
     setNoPathFound(true); // Set the state to display the "No Path Found" message
   } else {
     // Highlight the edges in the shortest path by making them red

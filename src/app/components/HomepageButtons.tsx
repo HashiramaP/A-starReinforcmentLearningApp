@@ -79,7 +79,7 @@ function HomepageButtons({
       {/* Display No Path Found message */}
       {noPathFound && (
         <div className="no-path-message">
-          No Path Found
+          Agent Coouldn't find a Path
           <button className="close-btn" onClick={handleClose}>
             &times; {/* Close icon */}
           </button>

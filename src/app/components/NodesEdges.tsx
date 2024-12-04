@@ -37,7 +37,7 @@ export const initialNodes = [
   {
     id: "C",
     data: { label: "C" },
-    position: { x: 350, y: 100 },
+    position: { x: 400, y: 50 },
     style: {
       borderRadius: "50%",
       background: "rgb(179, 170, 148)",
@@ -105,7 +105,7 @@ export const initialNodes = [
   {
     id: "G",
     data: { label: "G" },
-    position: { x: 250, y: 250 },
+    position: { x: 250, y: 150 },
     style: {
       borderRadius: "50%",
       background: "rgb(179, 170, 148)",
@@ -243,7 +243,7 @@ export const initialEdges = [
     labelBgPadding: [2, 2] as [number, number], // Padding inside the background // Adding label
   },
   {
-    id: "eF-A",
+    id: "eA-F",
     source: "A",
     target: "F",
     style: { stroke: "black", strokeWidth: 3 },
@@ -277,9 +277,43 @@ export const initialEdges = [
     labelBgPadding: [2, 2] as [number, number], // Padding inside the background
   },
   {
+    id: "eD-B",
+    source: "D",
+    target: "B",
+    style: { stroke: "black", strokeWidth: 3 },
+    weight: Math.floor(Math.random() * 20) + 1,
+    label: `${Math.floor(Math.random() * 20) + 1}`, // Adding label
+    labelStyle: {
+      fontSize: 18,
+      fontFamily: "Halo Dek, Arial, Helvetica, sans-serif",
+      background: "rgb(179, 170, 148)",
+    },
+    labelBgStyle: {
+      fill: "#edc915",
+    },
+    labelBgPadding: [2, 2] as [number, number], // Padding inside the background
+  },
+  {
     id: "eC-D",
     source: "C",
     target: "D",
+    style: { stroke: "black", strokeWidth: 3 },
+    weight: Math.floor(Math.random() * 20) + 1,
+    label: `${Math.floor(Math.random() * 20) + 1}`, // Adding label
+    labelStyle: {
+      fontSize: 18,
+      fontFamily: "Halo Dek, Arial, Helvetica, sans-serif",
+      background: "rgb(179, 170, 148)",
+    },
+    labelBgStyle: {
+      fill: "#edc915",
+    },
+    labelBgPadding: [2, 2] as [number, number], // Padding inside the background
+  },
+  {
+    id: "eG-A",
+    source: "G",
+    target: "A",
     style: { stroke: "black", strokeWidth: 3 },
     weight: Math.floor(Math.random() * 20) + 1,
     label: `${Math.floor(Math.random() * 20) + 1}`, // Adding label
