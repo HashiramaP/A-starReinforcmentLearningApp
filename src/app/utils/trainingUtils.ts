@@ -23,7 +23,7 @@ export const startTraining = async (
   const agent = new RLAgent(0.1, 0.9, 0.1);
 
   console.log("Training started. Beginning episodes...");
-  train(environment, agent, 10); // Train for 1000 episodes
+  train(environment, agent, 5); // Train for 1000 episodes
 };
 
 class GraphEnvironment {
@@ -174,41 +174,19 @@ class GraphEnvironment {
     }
   }
 }
-
-const GraphConvLayer = (
-  inputFeatures: tf.Tensor,
-  adjacencyMatrix: tf.Tensor
-) => {
-  // Simple graph convolution operation: Aggregate features based on the adjacency matrix
-  return adjacencyMatrix.matMul(inputFeatures); // Aggregate node features using the adjacency matrix
-};
-
-// A simple GNN model to process node features
-const buildGNNModel = (numNodes: number, numFeatures: number) => {
-  const inputFeatures = tf.input({ shape: [numFeatures] });
-  const adjacencyMatrix = tf.zeros([numNodes, numNodes]); // Initialize adjacency matrix (to be filled later)
-
-  const aggregatedFeatures = GraphConvLayer(inputFeatures, adjacencyMatrix);
-
-  const model = tf.model({
-    inputs: inputFeatures,
-    outputs: aggregatedFeatures,
-  });
-
-  return model;
-};
-
 class RLAgent {
   qTable: any; // Q-value table
   alpha: number; // Learning rate
   gamma: number; // Discount factor
   epsilon: number; // Exploration rate
+  nodes: any[];
 
   constructor(alpha: number, gamma: number, epsilon: number) {
     this.qTable = {}; // Initialize Q-table as an empty object
     this.alpha = alpha;
     this.gamma = gamma;
     this.epsilon = epsilon;
+    this.nodes = [];
   }
 
   // Action selection using epsilon-greedy policy
@@ -247,9 +225,13 @@ class RLAgent {
     reward: number,
     nextState: string
   ) {
-    const maxNextQValue = Math.max(
+    let maxNextQValue = Math.max(
       ...Object.values(this.qTable[nextState] || {})
     );
+    if (maxNextQValue === Infinity || maxNextQValue === -Infinity) {
+      maxNextQValue = 0; // or some other value to handle edge cases
+    }
+    console.log(`Max Q-value for next state ${nextState}: ${maxNextQValue}`);
     const currentQValue = this.getQValue(state, action);
 
     // Q-learning update rule
@@ -277,12 +259,31 @@ class RLAgent {
   }
 
   // Trace the shortest path using the Q-table (after training)
-  getShortestPath(startingNode: string, endingNode: string): string[] {
+  getShortestPath(
+    startingNode: string,
+    endingNode: string,
+    nodes: any
+  ): string[] {
+    const allNodesId = nodes.map((node: any) => node.id);
     let path: string[] = [startingNode];
     let currentNode = startingNode;
+    const visitedNodes = new Set<string>(); // Track visited nodes
 
     while (currentNode !== endingNode) {
+      if (visitedNodes.has(currentNode)) {
+        console.log("Dead end encountered. No further progress can be made.");
+        return path; // Return the path so far if a dead-end is encountered
+      }
+
+      visitedNodes.add(currentNode); // Mark the current node as visited
+
       const possibleActions = Object.keys(this.qTable[currentNode] || {});
+      if (possibleActions.length === 0) {
+        // No neighbors, terminate the search or handle backtracking
+        console.log(`No possible actions from ${currentNode}. Ending search.`);
+        return path; // Or you could return an error here if backtracking is not possible
+      }
+
       const nextAction = this.selectAction(currentNode, possibleActions); // Select the best action
       path.push(nextAction);
       currentNode = nextAction; // Move to the next state
@@ -332,6 +333,13 @@ const train = async (
       // Log the agent's current state and action
       console.log(`Agent moved to state: ${state}, Action: ${action}`);
 
+      // if agent reaches a dead end, end the episode
+      if (possibleActions.length === 0) {
+        // move to the next episode
+        done = true;
+        console.log(`Dead end reached at node: ${state}. Ending`);
+      }
+
       // If goal is reached, end the episode
       if (state === environment.endingNode) {
         done = true;
@@ -343,7 +351,8 @@ const train = async (
   // After training, get the shortest path
   const shortestPath = agent.getShortestPath(
     environment.startingNode,
-    environment.endingNode
+    environment.endingNode,
+    environment.nodes
   );
   console.log("Shortest Path:", shortestPath);
 
