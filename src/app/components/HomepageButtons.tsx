@@ -61,8 +61,8 @@ function HomepageButtons({
   return (
     <div>
       <div className="flex space-x-6 mt-6">
-        {/* Generate Graph Button */}
-        <button className="rock-button">Next Graph</button>
+        {/* Generate Graph Button
+        <button className="rock-button">Next Graph</button> */}
 
         {/* Episodes component to select iterations */}
         <Episodes setIterations={setIterations} />
