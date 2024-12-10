@@ -36,12 +36,12 @@ export default function RulesBox({ children }: { children: ReactNode }) {
               borderRadius: "50%",
               background: "orange",
               border: "3px solid black",
-              width: "72px",
-              height: "65px",
+              width: "clamp(50px, 5vw, 75px)",
+              height: "clamp(40px, 5vw, 65px)",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              fontSize: "18px", // Make the font size larger
+              fontSize: "clamp(10px, 2rem, 18px)", // Make the font size larger
               fontFamily: "Halo Dek, Arial, Helvetica, sans-serif", // Use your custom font
             }}
           >
@@ -63,12 +63,12 @@ export default function RulesBox({ children }: { children: ReactNode }) {
               borderRadius: "50%",
               background: "cyan",
               border: "3px solid black",
-              width: "72px",
-              height: "65px",
+              width: "clamp(50px, 5vw, 75px)",
+              height: "clamp(40px, 5vw, 65px)",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              fontSize: "18px", // Make the font size larger
+              fontSize: "clamp(10px, 2rem, 18px)", // Make the font size larger
               fontFamily: "Halo Dek, Arial, Helvetica, sans-serif", // Use your custom font
             }}
           >

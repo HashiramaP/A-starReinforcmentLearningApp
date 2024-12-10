@@ -91,19 +91,46 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  padding: 32px 40px; /* Increased padding to make the box larger */
-  background-color: rgb(179, 170, 148); /* Earthy beige tone */
-  border: 3px solid rgb(45, 45, 45); /* Darker edge for rock effect */
-  font-size: 1.5rem; /* Increased font size */
-  border-radius: 25px 35px 20px 30px; /* Irregular shape */
+  padding: 32px 40px;
+  background-color: rgb(179, 170, 148);
+  border: 3px solid rgb(45, 45, 45);
+  font-size: 1.5rem;
+  border-radius: 25px 35px 20px 30px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   z-index: 9999;
   display: flex;
   flex-direction: column;
-  align-items: center; /* Aligns text and button horizontally */
-  height: 75vh;
-  width: 35vw;
+  align-items: center;
+  height: clamp(300px, 75vh, 90vh);
+  width: clamp(300px, 90vw, 600px);
 }
+
+/* Adjust text size for smaller screens */
+@media (max-width: 768px) {
+  .rules-message {
+    font-size: 1.2rem;
+  }
+  .rules-message .text-3xl {
+    font-size: 1.5rem; /* Reduce title font size */
+  }
+  .rules-message .text-base {
+    font-size: 0.9rem; /* Reduce body text size */
+  }
+}
+
+/* Further adjustments for very small screens */
+@media (max-width: 480px) {
+  .rules-message {
+    font-size: 1rem;
+  }
+  .rules-message .text-3xl {
+    font-size: 1.2rem;
+  }
+  .rules-message .text-base {
+    font-size: 0.8rem;
+  }
+}
+
 .rules-message .close-btn {
   font-family: Halo Dek, Arial, Helvetica, sans-serif;
   cursor: pointer;
