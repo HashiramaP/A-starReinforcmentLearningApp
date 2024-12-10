@@ -31,7 +31,7 @@ export default function RulesBox({ children }: { children: ReactNode }) {
         {/* Flow representation */}
         <div className="flex items-center">
           <div
-            className="node-box flex justify-center items-center border border-black rounded-full"
+            className="node-box flex justify-center items-center border m-5 border-black rounded-full"
             style={{
               borderRadius: "50%",
               background: "orange",
@@ -48,7 +48,7 @@ export default function RulesBox({ children }: { children: ReactNode }) {
             A
           </div>
           <div
-            className="next-box flex items-center border-black rounded"
+            className="next-box flex items-center m-5 border-black rounded"
             style={{
               height: "40px",
               fontSize: "16px",
@@ -58,7 +58,7 @@ export default function RulesBox({ children }: { children: ReactNode }) {
             Node the Agent is currently on
           </div>
           <div
-            className="node-box flex justify-center items-center border border-black rounded-full"
+            className="node-box flex justify-center items-center border m-5 border-black rounded-full"
             style={{
               borderRadius: "50%",
               background: "cyan",
@@ -87,7 +87,7 @@ export default function RulesBox({ children }: { children: ReactNode }) {
         </div>
         {/* Edge below */}
         <div
-          className="next-box flex items-center mt-4 border-black rounded"
+          className="next-box flex items-center border-black rounded"
           style={{
             height: "40px",
             fontSize: "16px",

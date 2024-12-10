@@ -29,7 +29,9 @@ export default function Home() {
 
       <RulesClose />
       {/* Client-side components */}
-      <GraphNTraining />
+      <div className="custom-height">
+        <GraphNTraining />
+      </div>
     </div>
   );
 }

@@ -101,8 +101,8 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: clamp(300px, 75vh, 90vh);
-  width: clamp(300px, 90vw, 600px);
+  height: 85vh;
+  width: clamp(500px, 90vw, 800px);
 }
 
 /* Adjust text size for smaller screens */
@@ -179,4 +179,8 @@ body {
 
 .no-path-message .close-btn:active {
   background-color: rgba(0, 0, 0, 0.6); /* Slightly darker on click */
+}
+
+.custom-height {
+  height: 70vh;
 }

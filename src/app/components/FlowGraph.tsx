@@ -15,7 +15,7 @@ const FlowGraph = ({
   onNodeClick: (node: Node) => void; // Pass the handler to the parent
 }) => {
   return (
-    <div style={{ height: "60%", width: "100%" }}>
+    <div style={{ height: "80%", width: "100%" }}>
       <ReactFlow
         nodes={nodes}
         edges={edges}

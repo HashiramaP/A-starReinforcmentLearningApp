@@ -60,7 +60,7 @@ export default function GraphNTraining() {
   };
 
   return (
-    <div className="flex flex-col items-center h-screen">
+    <div className="flex flex-col items-center h-full">
       <FlowGraph nodes={nodes} edges={edges} onNodeClick={handleNodeClick} />
       <HomepageButtons
         startingNode={startingNode ? startingNode : { id: "" }}
